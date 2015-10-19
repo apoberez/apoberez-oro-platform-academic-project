@@ -37,6 +37,27 @@ trait EntityTestCaseTrait
 
     /**
      * @param $entity
+     * @param array $dataToSet
+     * @param array|null $expectedData
+     */
+    public static function assertEntitySetters($entity, array $dataToSet, array $expectedData = null)
+    {
+        $expectedData = $expectedData ?: $dataToSet;
+        $reflectionClass = new \ReflectionClass(get_class($entity));
+
+        foreach ($dataToSet as $propertyName => $value) {
+            $entity->{'set' . ucfirst($propertyName)}($value);
+        }
+
+        foreach ($expectedData as $propertyName => $value) {
+            $property = $reflectionClass->getProperty($propertyName);
+            $property->setAccessible(true);
+            \PHPUnit_Framework_Assert::assertSame($expectedData[$propertyName], $property->getValue($entity));
+        }
+    }
+
+    /**
+     * @param $entity
      * @param $property
      * @return string
      */

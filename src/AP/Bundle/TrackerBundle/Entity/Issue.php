@@ -7,11 +7,11 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Class Issue
  * @package AP\Bundle\TrackerBundle
- * @ORM\Entity()
+ *
+ * @ORM\Entity
  * @ORM\Table(
  *      name="ap_tracker_issue"
  * )
- *
  */
 class Issue
 {
@@ -20,7 +20,7 @@ class Issue
      *
      * @ORM\Column(type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="auto")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
 
@@ -41,23 +41,32 @@ class Issue
     /**
      * @var Priority
      *
+     * @ORM\ManyToOne(targetEntity="Priority")
+     * @ORM\JoinColumn(name="priority_id", referencedColumnName="id")
      */
     protected $priority;
 
     /**
      * @var Resolution
+     *
+     * @ORM\ManyToOne(targetEntity="Resolution")
+     * @ORM\JoinColumn(name="resolution_id", referencedColumnName="id")
      */
     protected $resolution;
 
     /**
      * @var \DateTime
+     *
+     * @ORM\Column(type="created_at", type="datetime")
      */
-    protected $created;
+    protected $createdAt;
 
     /**
      * @var \DateTime
+     *
+     * @ORM\Column(name="updated_at", type="datetime")
      */
-    protected $updated;
+    protected $updatedAt;
 
     /**
      * @return int
@@ -134,32 +143,32 @@ class Issue
     /**
      * @return \DateTime
      */
-    public function getCreated()
+    public function getCreatedAt()
     {
-        return $this->created;
+        return $this->createdAt;
     }
 
     /**
-     * @param \DateTime $created
+     * @param \DateTime $createdAt
      */
-    public function setCreated($created)
+    public function setCreatedAt($createdAt)
     {
-        $this->created = $created;
+        $this->createdAt = $createdAt;
     }
 
     /**
      * @return \DateTime
      */
-    public function getUpdated()
+    public function getUpdatedAt()
     {
-        return $this->updated;
+        return $this->updatedAt;
     }
 
     /**
-     * @param \DateTime $updated
+     * @param \DateTime $updatedAt
      */
-    public function setUpdated($updated)
+    public function setUpdatedAt($updatedAt)
     {
-        $this->updated = $updated;
+        $this->updatedAt = $updatedAt;
     }
 }

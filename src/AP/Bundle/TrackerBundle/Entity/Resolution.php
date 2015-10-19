@@ -3,6 +3,8 @@
 
 namespace AP\Bundle\TrackerBundle\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
+
 /**
  * Class Resolution
  * @package AP\Bundle\TrackerBundle\Entity

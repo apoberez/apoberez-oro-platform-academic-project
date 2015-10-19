@@ -1,0 +1,61 @@
+{% extends 'OroUIBundle:actions:view.html.twig' %}
+{% import 'OroUIBundle::macros.html.twig' as UI %}
+
+{% block navButtons %}
+    {% if resource_granted('EDIT', entity) %}
+        {{ UI.editButton({
+            'path' : path('task_tracker.issue_update', { id: entity.id }),
+            'entity_label': 'Issue'|trans
+        }) }}
+    {% endif %}
+
+    {% if resource_granted('DELETE', entity) %}
+        {{ UI.deleteButton({
+            'dataUrl': path('task_tracker.issue_index', {'id': entity.id}),
+            'dataRedirect': path('task_tracker.issue_index'),
+            'aCss': 'no-hash remove-button',
+            'id': 'btn-remove-vehicle',
+            'dataId': entity.id,
+            'entity_label': 'Issue'|trans,
+        }) }}
+    {% endif %}
+{% endblock navButtons %}
+
+{% block pageHeader %}
+    {% set breadcrumbs = {
+    'entity':      entity,
+    'indexPath':   path('test_platform.vehicle_index'),
+    'indexLabel': 'Issues'|trans,
+    'entityTitle': entity.model
+    } %}
+    {{ parent() }}
+{% endblock pageHeader %}
+
+{% block content_data %}
+    {% set data %}
+        <div class="widget-content">
+            <div class="row-fluid form-horizontal">
+                <div class="responsive-block">
+                    {{ UI.renderProperty('Summary'|trans, entity.summary) }}
+                    {{ UI.renderProperty('Description'|trans, entity.description) }}
+                    {{ UI.renderProperty('Created'|trans, entity.createdAt|date) }}
+                    {{ UI.renderProperty('Updated'|trans, entity.updatedAt|date) }}
+                </div>
+            </div>
+        </div>
+    {% endset %}
+    {% set dataBlocks = [
+    {
+    'title': 'Data'|trans,
+    'class': 'active',
+    'subblocks': [
+    { 'data' : [data] }
+    ]
+    }
+    ] %}
+
+    {% set id = 'issueView' %}
+    {% set data = { 'dataBlocks': dataBlocks } %}
+    {{ parent() }}
+{% endblock content_data %}
+

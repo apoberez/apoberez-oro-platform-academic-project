@@ -1,0 +1,30 @@
+datagrid:
+    issues-grid:
+        source:
+            acl_resource: task_tracker.issue_view
+            type: orm
+            query:
+#            code, summary, type, priority, status, resolution, reporter, assignee, created, updated
+                select:
+                    - issue.code
+                    - issue.summary
+#                    - issue.description
+#                    - issue.type
+#                    - issue.priority
+#                    - issue.status
+#                    - issue.resolution
+                    - issue.createdAt
+                    - issue.updatedAt
+                from:
+                    - { table: APTaskTrackerBundle:Issue, alias: issue }
+        columns:
+            code:
+                label: Code
+            summary:
+                label: Summary
+            createdAt:
+                label: Created
+                frontend_type: date
+            updatedAt:
+                label: Updated
+                frontend_type: date

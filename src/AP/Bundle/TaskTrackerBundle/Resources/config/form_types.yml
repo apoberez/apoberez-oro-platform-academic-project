@@ -1,0 +1,8 @@
+parameters:
+    ap.task_tracker.forrm.type.issue_type.class: 'AP\Bundle\TaskTrackerBundle\Form\Type\IssueType'
+
+services:
+    ap.task_tracker.form.type.issue:
+        class: %ap.task_tracker.forrm.type.issue_type.class%
+        tags:
+            - { name: form.type, alias: task_tracker_issue }

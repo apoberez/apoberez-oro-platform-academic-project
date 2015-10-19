@@ -2,32 +2,27 @@
 
 namespace AP\Component\TestUtils\Entity;
 
+use AP\Component\ObjectAccessUtils\ObjectPrivatePropertiesSetter;
+
 trait EntityTestCaseTrait
 {
+    use ObjectPrivatePropertiesSetter;
+
     /**
      * @param $entity
      * @param array $data
      * @return mixed
      */
-    public static function setEntityData($entity, array $data)
+    public function setEntityData($entity, array $data)
     {
-        $className = get_class($entity);
-        $reflectionClass = new \ReflectionClass($className);
-
-        foreach ($data as $propertyName => $value) {
-            $property = $reflectionClass->getProperty($propertyName);
-            $property->setAccessible(true);
-            $property->setValue($entity, $value);
-        }
-
-        return $entity;
+        return $this->setObjectProperties($entity, $data);
     }
 
     /**
      * @param $entity
      * @param array $expected
      */
-    public static function assertEntityGetters($entity, array $expected)
+    public function assertEntityGetters($entity, array $expected)
     {
         foreach ($expected as $property => $value) {
             $actualValue = $entity->{self::getAccessMethodName($entity, $property)}();
@@ -40,7 +35,7 @@ trait EntityTestCaseTrait
      * @param array $dataToSet
      * @param array|null $expectedData
      */
-    public static function assertEntitySetters($entity, array $dataToSet, array $expectedData = null)
+    public function assertEntitySetters($entity, array $dataToSet, array $expectedData = null)
     {
         $expectedData = $expectedData ?: $dataToSet;
         $reflectionClass = new \ReflectionClass(get_class($entity));
@@ -61,7 +56,7 @@ trait EntityTestCaseTrait
      * @param $property
      * @return string
      */
-    private static function getAccessMethodName($entity, $property)
+    private function getAccessMethodName($entity, $property)
     {
         $availablePrefixes = ['get', 'is'];
 

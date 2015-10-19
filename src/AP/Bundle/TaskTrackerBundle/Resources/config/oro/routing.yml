@@ -1,0 +1,4 @@
+test_platform_bundle:
+    resource: "@APTaskTrackerBundle/Controller"
+    type: annotation
+    prefix: /task-tracker

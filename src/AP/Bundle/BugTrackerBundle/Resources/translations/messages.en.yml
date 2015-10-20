@@ -1,0 +1,20 @@
+ap:
+    bug_tracker:
+        menu:
+            bug_tracker_tab:    Bug tracker
+            issue_index:        List of issues
+            issue_create:       Create issue
+
+        controller:
+            issue:
+                saved_message: New issue was successfully created.
+
+        issue_entity:
+            label: Issue
+            plural_label: Issues
+
+            #properties:
+            summary_label: Summary
+            description_label: Description
+            created_at_label: Created at
+            updated_at_label: Updated at

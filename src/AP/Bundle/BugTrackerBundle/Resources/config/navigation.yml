@@ -1,0 +1,23 @@
+oro_menu_config:
+    items:
+        bug_tracker_tab:
+            label: ap.bug_tracker.menu.bug_tracker_tab
+            uri: '#'
+        issue_index:
+            label: ap.bug_tracker.menu.issue_index
+            route: bug_tracker.issue_index
+        issue_create:
+            label: ap.bug_tracker.menu.issue_create
+            route: bug_tracker.issue_create
+
+    tree:
+        application_menu:
+            children:
+                bug_tracker_tab:
+                    children:
+                        issue_index: ~
+                        issue_create: ~
+
+oro_titles:
+    bug_tracker.issue_index: "Issues - list"
+    bug_tracker.issue_create: "Create new issue"

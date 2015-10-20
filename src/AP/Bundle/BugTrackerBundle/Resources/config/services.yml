@@ -1,0 +1,20 @@
+parameters:
+    ap.bug_tracker.manager.issue_api.class:         'Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager'
+    ap.bug_tracker.issue.entity.class:              'AP\Bundle\BugTrackerBundle\Entity\Issue'
+    ap.bug_tracker.issue_form_handler.class:        'Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler'
+
+services:
+    ap.bug_tracker.issue_form_handler:
+        class: %ap.bug_tracker.issue_form_handler.class%
+        scope: request
+        arguments:
+            - @ap.bug_tracker.form.issue_api
+            - @request
+            - @doctrine.orm.entity_manager
+
+    ap.bug_tracker.manager.issue_api:
+        class: %ap.bug_tracker.manager.issue_api.class%
+        parent: oro_soap.manager.entity_manager.abstract
+        arguments:
+            - %ap.bug_tracker.issue.entity.class%
+            - @doctrine.orm.entity_manager

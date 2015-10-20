@@ -1,0 +1,13 @@
+bug_tracker_bundle:
+    resource: "@APBugTrackerBundle/Controller"
+    type: annotation
+    prefix: /bug-tracker
+
+bug_tracker_bundle_api:
+    resource: "@APBugTrackerBundle/Controller/Api/Rest/IssueController.php"
+    type:     rest
+    prefix:       api/rest/{version}/
+    requirements:
+        version:  latest|v1
+    defaults:
+        version:  latest

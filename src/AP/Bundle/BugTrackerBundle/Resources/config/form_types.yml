@@ -1,0 +1,22 @@
+parameters:
+    ap.bug_tracker.form.type.issue_type.class:      'AP\Bundle\BugTrackerBundle\Form\Type\IssueType'
+    ap.bug_tracker.form.type.issue_type_api.class:  'AP\Bundle\BugTrackerBundle\Form\Type\IssueType'
+
+services:
+    ap.bug_tracker.form.type.issue:
+        class: %ap.bug_tracker.form.type.issue_type.class%
+        tags:
+            - { name: form.type, alias: bug_tracker_issue }
+
+    ap.bug_tracker.form.type.issue_api:
+        class: %ap.bug_tracker.form.type.issue_type_api.class%
+        tags:
+            - { name: form.type, alias: issue }
+
+    ap.bug_tracker.form.issue_api:
+        class: Symfony\Component\Form\Form
+        factory_method: createNamed
+        factory_service: form.factory
+        arguments:
+            - ~
+            - 'issue'

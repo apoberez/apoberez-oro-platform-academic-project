@@ -31,6 +31,38 @@ use Oro\Bundle\TagBundle\Entity\Taggable;
  */
 class Issue extends ExtendIssue implements Taggable
 {
+    const TYPE_STORY = 1;
+    const TYPE_BUG = 2;
+    const TYPE_IMPROVEMENT = 3;
+
+    const TYPE_STORY_LABEL = 'ap.bug_tracker.type.story';
+    const TYPE_BUG_LABEL = 'ap.bug_tracker.type.bug';
+    const TYPE_IMPROVEMENT_LABEL = 'ap.bug_tracker.type.improvement';
+
+    /**
+     * @return int[]
+     */
+    public static function getTypes()
+    {
+        return [
+            static::TYPE_STORY,
+            static::TYPE_BUG,
+            static::TYPE_IMPROVEMENT,
+        ];
+    }
+
+    /**
+     * @return string[]
+     */
+    public static function getTypeNames()
+    {
+        return [
+            static::TYPE_STORY => static::TYPE_STORY_LABEL,
+            static::TYPE_BUG => static::TYPE_BUG_LABEL,
+            static::TYPE_IMPROVEMENT => static::TYPE_IMPROVEMENT_LABEL,
+        ];
+    }
+
     /**
      * @var integer
      *
@@ -57,9 +89,16 @@ class Issue extends ExtendIssue implements Taggable
     /**
      * @var integer
      *
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="integer", unique=true)
      */
     protected $code;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="issue_type", type="integer")
+     */
+    protected $type;
 
     /**
      * @var Priority
@@ -137,6 +176,34 @@ class Issue extends ExtendIssue implements Taggable
     public function getCode()
     {
         return $this->code;
+    }
+
+    /**
+     * @return int
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param int $type
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTypeName()
+    {
+        if ($this->getType() && array_key_exists($this->getType(), self::getTypeNames())) {
+            return self::getTypeNames()[$this->getType()];
+        }
+
+        return null;
     }
 
     /**
@@ -219,9 +286,8 @@ class Issue extends ExtendIssue implements Taggable
      * @param \DateTime $updatedAt
      * @return $this
      */
-    public function setUpdatedAt($updatedAt = null)
+    public function setUpdatedAt($updatedAt)
     {
-        $updatedAt = $updatedAt ?: new \DateTime('now', new \DateTimeZone('UTC'));
         $this->updatedAt = $updatedAt;
 
         return $this;
@@ -259,7 +325,6 @@ class Issue extends ExtendIssue implements Taggable
 
     /**
      * Pre update event handler
-     *todo fix
      * @ORM\PreUpdate
      */
     public function preUpdate()

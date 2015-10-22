@@ -28,8 +28,8 @@ class IssueFormHandler implements FormHandlerInterface, TagHandlerInterface
      * @param Issue $issue
      * @return bool
      */
-    public function handleBeforeFlush(Issue $issue)
+    public function handleAfterFlush(Issue $issue)
     {
-        $this->tagManager->saveTagging($issue, false);
+        $this->tagManager->saveTagging($issue);
     }
 }

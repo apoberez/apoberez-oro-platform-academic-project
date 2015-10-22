@@ -1,9 +1,25 @@
 ap:
     bug_tracker:
+        priority:
+            high: High
+            medium: Medium
+            low: Low
+        resolution:
+            fixed: Fixed
+            duplicate: Duplicat
+            will_not_fix: "Won't fix"
+        type:
+            story: Story
+            bug: Bug
+            improvement: Improvement
+
         menu:
             bug_tracker_tab:    Bug tracker
             issue_index:        List of issues
             issue_create:       Create issue
+
+        button:
+            create_subtask: Create subtask
 
         controller:
             issue:
@@ -14,7 +30,8 @@ ap:
             plural_label: Issues
 
             #properties:
-            summary_label: Summary
-            description_label: Description
-            created_at_label: Created at
-            updated_at_label: Updated at
+            summary_label:          Summary
+            description_label:      Description
+            type_label:             Type
+            created_at_label:       Created at
+            updated_at_label:       Updated at

@@ -68,4 +68,9 @@ class IssueControllerTest extends WebTestCase
         //todo assert entity in db
         //todo assert tag association
     }
+
+    public function testViewIssue()
+    {
+
+    }
 }

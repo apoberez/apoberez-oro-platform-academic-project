@@ -84,6 +84,7 @@ class APBugTrackerBundleInstaller implements Installation, NoteExtensionAwareInt
         $table->addColumn('resolution_id', 'integer', ['notnull' => false]);
         $table->addColumn('summary', 'text', []);
         $table->addColumn('description', 'text', []);
+        $table->addColumn('type', 'integer', []);
         $table->addColumn('code', 'integer', []);
         $table->addColumn('createdAt', 'datetime', []);
         $table->addColumn('updated_at', 'datetime', []);

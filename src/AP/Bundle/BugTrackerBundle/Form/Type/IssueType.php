@@ -2,6 +2,7 @@
 
 namespace AP\Bundle\BugTrackerBundle\Form\Type;
 
+use AP\Bundle\BugTrackerBundle\Entity\Issue;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -29,6 +30,11 @@ class IssueType extends AbstractType
             ])
             ->add('tags', 'oro_tag_select', [
                 'label' => 'oro.tag.entity_plural_label'
+            ])
+            ->add('type', 'choice', [
+                'label' => 'type',
+                'required' => true,
+                'choices' => Issue::getTypeNames()
             ]);
         ;
     }

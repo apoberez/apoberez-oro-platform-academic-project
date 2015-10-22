@@ -82,13 +82,13 @@ datagrid:
                 label: oro.grid.action.delete
                 icon: trash
                 link: delete_link
-#        mass_actions:
-#            delete:
-#                type: delete
-#                entity_name: %orocrm_contact.entity.class%
-#                data_identifier: c.id
-#                acl_resource: orocrm_contact_delete
-#                label: oro.grid.action.delete
-#                icon: trash
+        mass_actions:
+            delete:
+                type: delete
+                entity_name: %ap.bug_tracker.issue.entity.class%
+                data_identifier: issue.id
+                acl_resource: bug_tracker.issue_delete
+                label: Delete
+                icon: trash
         options:
             entity_pagination: true

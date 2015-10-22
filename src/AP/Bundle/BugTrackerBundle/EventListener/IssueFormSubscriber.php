@@ -9,7 +9,7 @@ use Oro\Bundle\FormBundle\Event\FormHandler\AfterFormProcessEvent;
 use Oro\Bundle\FormBundle\Event\FormHandler\Events;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class IssueFormListener implements EventSubscriberInterface
+class IssueFormSubscriber implements EventSubscriberInterface
 {
     /**
      * @var FormHandlerInterface
@@ -17,7 +17,7 @@ class IssueFormListener implements EventSubscriberInterface
     private $handler;
 
     /**
-     * IssueFormListener constructor.
+     * IssueFormSubscriber constructor.
      * @param FormHandlerInterface $handler
      */
     public function __construct(FormHandlerInterface $handler)
@@ -29,10 +29,10 @@ class IssueFormListener implements EventSubscriberInterface
     /**
      * @param AfterFormProcessEvent $event
      */
-    public function onBeforeFlush(AfterFormProcessEvent $event)
+    public function onAfterFlush(AfterFormProcessEvent $event)
     {
         if (is_object($event->getData()) && $event->getData() instanceof Issue) {
-            $this->handler->handleBeforeFlush($event->getData());
+            $this->handler->handleAfterFlush($event->getData());
         }
     }
 
@@ -42,7 +42,7 @@ class IssueFormListener implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            Events::BEFORE_FLUSH => 'onBeforeFlush'
+            Events::AFTER_FLUSH => 'onAfterFlush'
         ];
     }
 }

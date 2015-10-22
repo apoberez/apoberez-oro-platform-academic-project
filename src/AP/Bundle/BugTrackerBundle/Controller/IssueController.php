@@ -61,7 +61,10 @@ class IssueController extends Controller
      */
     public function viewAction(Issue $issue)
     {
-        return ['entity' => $issue];
+        return [
+            'entity' => $issue,
+            'canHaveSubtask' => $this->get('ap.bug_tracker.subtask_add_permission_checker')->check($issue)
+        ];
     }
 
     /**

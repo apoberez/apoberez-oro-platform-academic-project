@@ -11,5 +11,5 @@ interface FormHandlerInterface
      * @param Issue $issue
      * @return bool
      */
-    public function handleBeforeFlush(Issue $issue);
+    public function handleAfterFlush(Issue $issue);
 }

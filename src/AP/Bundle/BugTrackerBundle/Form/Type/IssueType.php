@@ -27,6 +27,9 @@ class IssueType extends AbstractType
                 'class' => 'AP\Bundle\BugTrackerBundle\Entity\Priority',
                 'required' => true,
             ])
+            ->add('tags', 'oro_tag_select', [
+                'label' => 'oro.tag.entity_plural_label'
+            ]);
         ;
     }
 
@@ -47,6 +50,6 @@ class IssueType extends AbstractType
      */
     public function getName()
     {
-        return self::NAME;
+        return static::NAME;
     }
 }

@@ -80,7 +80,7 @@ class IssueController extends RestController
      * @AclAncestor("bug_tracker.issue_update")
      * @return Response
      */
-    public function updateAction($id)
+    public function putAction($id)
     {
         return $this->handleUpdateRequest($id);
     }
@@ -92,7 +92,7 @@ class IssueController extends RestController
      * )
      * @AclAncestor("bug_tracker.issue_create")
      */
-    public function createAction()
+    public function postAction()
     {
         return $this->handleCreateRequest();
     }
@@ -140,6 +140,6 @@ class IssueController extends RestController
      */
     public function getFormHandler()
     {
-        return $this->get('ap.bug_tracker.issue_form_handler');
+        return $this->get('ap.bug_tracker.issue_form_handler_api');
     }
 }

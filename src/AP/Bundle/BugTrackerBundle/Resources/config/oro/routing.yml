@@ -5,8 +5,8 @@ bug_tracker_bundle:
 
 bug_tracker_bundle_api:
     resource: "@APBugTrackerBundle/Controller/Api/Rest/IssueController.php"
-    type:     rest
-    prefix:       api/rest/{version}/
+    type: rest
+    prefix: api/rest/{version}/
     requirements:
         version:  latest|v1
     defaults:

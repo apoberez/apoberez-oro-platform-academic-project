@@ -1,2 +1,2 @@
 bundles:
-    - AP\Bundle\BugTrackerBundle\APBugTrackerBundle
+    - { name: AP\Bundle\BugTrackerBundle\APBugTrackerBundle, priority: 10 }

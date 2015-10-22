@@ -53,7 +53,10 @@ class IssueControllerTest extends WebTestCase
         $form['bug_tracker_issue[summary]'] = 'Issue Summary';
         $form['bug_tracker_issue[description]'] = 'Test create new issue.';
         $form['bug_tracker_issue[priority]'] = $priority->getId();
-
+        $form['bug_tracker_issue[tags][all]'] =
+            '[{"id":"Test","name":"Test","owner":true,"notSaved":true,"moreOwners":false,"url":""}]';
+        $form['bug_tracker_issue[tags][owner]'] =
+            '[{"id":"Test","name":"Test","owner":true,"notSaved":true,"moreOwners":false,"url":""}]';
         $this->client->followRedirects(true);
         $crawler = $this->client->submit($form);
 
@@ -63,5 +66,6 @@ class IssueControllerTest extends WebTestCase
         $this->assertTrue($this->client->getResponse()->isSuccessful());
 
         //todo assert entity in db
+        //todo assert tag association
     }
 }

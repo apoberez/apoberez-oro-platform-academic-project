@@ -1,16 +1,30 @@
 parameters:
     ap.bug_tracker.manager.issue_api.class:         'Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager'
+    ap.bug_tracker.issue_form_handler_api.class:    'Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler'
+    ap.bug_tracker.issue_form_handler.class:        'AP\Bundle\BugTrackerBundle\Form\Handler\IssueFormHandler'
     ap.bug_tracker.issue.entity.class:              'AP\Bundle\BugTrackerBundle\Entity\Issue'
-    ap.bug_tracker.issue_form_handler.class:        'Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler'
 
 services:
-    ap.bug_tracker.issue_form_handler:
-        class: %ap.bug_tracker.issue_form_handler.class%
+    ap.bug_tracker.issue_form_handler_api:
+        class: %ap.bug_tracker.issue_form_handler_api.class%
         scope: request
         arguments:
             - @ap.bug_tracker.form.issue_api
             - @request
             - @doctrine.orm.entity_manager
+
+    ap.bug_tracker.issue_form_handler:
+        class: %ap.bug_tracker.issue_form_handler.class%
+        lazy: true
+        tags:
+            - { name: oro_tag.tag_manager }
+
+    ap.bug_tracker.issue.form_subscriber:
+        class: 'AP\Bundle\BugTrackerBundle\EventListener\IssueFormListener'
+        arguments:
+            - @ap.bug_tracker.issue_form_handler
+        tags:
+            - { name: kernel.event_subscriber }
 
     ap.bug_tracker.manager.issue_api:
         class: %ap.bug_tracker.manager.issue_api.class%

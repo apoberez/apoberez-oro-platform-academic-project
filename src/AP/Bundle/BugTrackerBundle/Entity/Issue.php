@@ -2,7 +2,12 @@
 
 namespace AP\Bundle\BugTrackerBundle\Entity;
 
+use AP\Bundle\BugTrackerBundle\Model\ExtendIssue;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
+use Oro\Bundle\TagBundle\Entity\Taggable;
 
 /**
  * Class Issue
@@ -12,9 +17,19 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(
  *      name="ap_bug_tracker_issue"
  * )
- * @ORM\HasLifecycleCallbacks()
+ * @ORM\HasLifecycleCallbacks
+ *
+ * @Config(
+ *      routeName="bug_tracker.issue_index",
+ *      routeView="bug_tracker.issue_view",
+ *      defaultValues={
+ *          "dataaudit"={
+ *              "auditable"=true
+ *          }
+ *      }
+ * )
  */
-class Issue
+class Issue extends ExtendIssue implements Taggable
 {
     /**
      * @var integer
@@ -75,6 +90,19 @@ class Issue
      * @ORM\Column(name="updated_at", type="datetime")
      */
     protected $updatedAt;
+
+    /**
+     * @var ArrayCollection*
+     *
+     * @ConfigField(
+     *      defaultValues={
+     *          "merge"={
+     *              "display"=true
+     *          }
+     *      }
+     * )
+     */
+    protected $tags;
 
     /**
      * @return int
@@ -191,8 +219,9 @@ class Issue
      * @param \DateTime $updatedAt
      * @return $this
      */
-    public function setUpdatedAt($updatedAt)
+    public function setUpdatedAt($updatedAt = null)
     {
+        $updatedAt = $updatedAt ?: new \DateTime('now', new \DateTimeZone('UTC'));
         $this->updatedAt = $updatedAt;
 
         return $this;
@@ -230,11 +259,57 @@ class Issue
 
     /**
      * Pre update event handler
-     *
+     *todo fix
      * @ORM\PreUpdate
      */
     public function preUpdate()
     {
         $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
+    }
+
+    /**
+     * Returns the unique taggable resource identifier
+     *
+     * @return string
+     */
+    public function getTaggableId()
+    {
+        return $this->getId();
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getSummary();
+    }
+
+
+    /**
+     * Returns the collection of tags for this Taggable entity
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getTags()
+    {
+        if (!$this->tags) {
+            $this->tags = new ArrayCollection();
+        }
+
+        return $this->tags;
+    }
+
+    /**
+     * Set tag collection
+     *
+     * @param $tags
+     * @return $this
+     */
+    public function setTags($tags)
+    {
+        $this->tags = $tags;
+
+        return $this;
     }
 }

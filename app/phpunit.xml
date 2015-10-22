@@ -37,6 +37,7 @@
             <directory>../src</directory>
             <exclude>
                 <directory>../src/*/Bundle/*Bundle/DataFixtures</directory>
+                <directory>../src/*/Bundle/*Bundle/Migrations</directory>
                 <directory>../src/*/Bundle/*Bundle/Resources</directory>
                 <directory>../src/*/Bundle/*Bundle/Tests</directory>
             </exclude>

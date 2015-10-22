@@ -5,11 +5,11 @@ namespace AP\Bundle\BugTrackerBundle\Form\Handler;
 
 use AP\Bundle\BugTrackerBundle\Entity\Issue;
 
-interface ApiHandlerInterface
+interface FormHandlerInterface
 {
     /**
      * @param Issue $issue
      * @return bool
      */
-    public function process(Issue $issue);
+    public function handleBeforeFlush(Issue $issue);
 }

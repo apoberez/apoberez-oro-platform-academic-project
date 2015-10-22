@@ -15,19 +15,19 @@ class LoadPriorities extends AbstractFixture
      */
     protected static $data = [
         [
-            'name' => 'high',
+            'name' => 'ap.bug_tracker.priority.high',
             'description' => 'Serious problem that could block progress.',
-            'order' => 1
+            'order' => 3
         ],
         [
-            'name' => 'medium',
+            'name' => 'ap.bug_tracker.priority.medium',
             'description' => 'Has a problem to affect progress.',
             'order' => 2
         ],
         [
-            'name' => 'low',
+            'name' => 'ap.bug_tracker.priority.low',
             'description' => 'Minor problem or easily worked around.',
-            'order' => 3
+            'order' => 1
         ]
     ];
 

@@ -1,0 +1,13 @@
+AP\Bundle\BugTrackerBundle\Entity\Issue:
+    alias: ap_bug_tracker_issue
+    label: ap.bug_tracker.issue_entity.label
+    route:
+        name: bug_tracker.issue_view
+        parameters:
+            id: id
+    search_template: APBugTrackerBundle:Issue:searchResult.html.twig
+    fields:
+        -
+            name:                   summary
+            target_type:            text
+            target_fields:          [summary]

@@ -15,17 +15,17 @@ class LoadResolutions extends AbstractFixture
      */
     protected static $data = [
         [
-            'name' => 'Fixed',
+            'name' => 'ap.bug_tracker.resolution.fixed',
             'description' => 'A fix for this issue is checked in tree and tested.',
             'order' => 1
         ],
         [
-            'name' => 'Duplicate',
+            'name' => 'ap.bug_tracker.resolution.duplicate',
             'description' => 'The problem is duplicate of existing issue.',
             'order' => 2
         ],
         [
-            'name' => 'Will_not_fix',
+            'name' => 'ap.bug_tracker.resolution.will_not_fix',
             'description' => 'The problem described is an issue which will never be fixed.',
             'order' => 3
         ]

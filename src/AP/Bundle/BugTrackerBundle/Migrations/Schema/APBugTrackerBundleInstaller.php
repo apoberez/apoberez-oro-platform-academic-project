@@ -3,15 +3,29 @@
 namespace AP\Bundle\BugTrackerBundle\Migrations\Schema;
 
 use Doctrine\DBAL\Schema\Schema;
+use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
+use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\Installation;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
+use Oro\Bundle\NoteBundle\Migration\Extension\NoteExtension;
+use Oro\Bundle\NoteBundle\Migration\Extension\NoteExtensionAwareInterface;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
  * @SuppressWarnings(PHPMD.ExcessiveClassLength)
  */
-class APBugTrackerBundleInstaller implements Installation
+class APBugTrackerBundleInstaller implements Installation, NoteExtensionAwareInterface, ActivityExtensionAwareInterface
 {
+    /**
+     * @var NoteExtension
+     */
+    protected $noteExtension;
+
+    /**
+     * @var ActivityExtension
+     */
+    protected $activityExtension;
+
     /**
      * {@inheritdoc}
      */
@@ -32,6 +46,29 @@ class APBugTrackerBundleInstaller implements Installation
 
         /** Foreign keys generation **/
         $this->addApBugTrackerIssueForeignKeys($schema);
+
+        $this->noteExtension->addNoteAssociation($schema, 'ap_bug_tracker_issue');
+        $this->activityExtension->addActivityAssociation($schema, 'oro_email', 'ap_bug_tracker_issue');
+    }
+
+    /**
+     * Sets the NoteExtension
+     *
+     * @param NoteExtension $noteExtension
+     */
+    public function setNoteExtension(NoteExtension $noteExtension)
+    {
+        $this->noteExtension = $noteExtension;
+    }
+
+    /**
+     * Sets the ActivityExtension
+     *
+     * @param ActivityExtension $activityExtension
+     */
+    public function setActivityExtension(ActivityExtension $activityExtension)
+    {
+        $this->activityExtension = $activityExtension;
     }
 
     /**
@@ -43,9 +80,10 @@ class APBugTrackerBundleInstaller implements Installation
     {
         $table = $schema->createTable('ap_bug_tracker_issue');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
-        $table->addColumn('resolution_id', 'integer', ['notnull' => false]);
         $table->addColumn('priority_id', 'integer', ['notnull' => false]);
+        $table->addColumn('resolution_id', 'integer', ['notnull' => false]);
         $table->addColumn('summary', 'text', []);
+        $table->addColumn('description', 'text', []);
         $table->addColumn('code', 'integer', []);
         $table->addColumn('createdAt', 'datetime', []);
         $table->addColumn('updated_at', 'datetime', []);
@@ -93,14 +131,14 @@ class APBugTrackerBundleInstaller implements Installation
     {
         $table = $schema->getTable('ap_bug_tracker_issue');
         $table->addForeignKeyConstraint(
-            $schema->getTable('ap_bug_tracker_resolution'),
-            ['resolution_id'],
+            $schema->getTable('ap_bug_tracker_priority'),
+            ['priority_id'],
             ['id'],
             ['onDelete' => null, 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable('ap_bug_tracker_priority'),
-            ['priority_id'],
+            $schema->getTable('ap_bug_tracker_resolution'),
+            ['resolution_id'],
             ['id'],
             ['onDelete' => null, 'onUpdate' => null]
         );

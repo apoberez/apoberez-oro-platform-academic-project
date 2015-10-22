@@ -18,19 +18,20 @@ class LoadIssueData extends AbstractFixture implements DependentFixtureInterface
      */
     public function load(ObjectManager $manager)
     {
-        $issue = new Issue();
+        $resolution = $manager->getRepository('APBugTrackerBundle:Resolution')->findOneBy([]);
+        $priority = $manager->getRepository('APBugTrackerBundle:Priority')->findOneBy([]);
 
-        $resolution = $manager->getRepository('APBugTrackerBundle:Resolution')->find(1);
-        $priority = $manager->getRepository('APBugTrackerBundle:Priority')->find(1);
+        for ($i = 1; $i < 21; $i++) {
+            $issue = new Issue();
+            $issue->setDescription("Test issue $i description.")
+                ->setCode("AP-$i")
+                ->setPriority($priority)
+                ->setResolution($resolution)
+                ->setSummary("Test issue $i summary.")
+            ;
+            $manager->persist($issue);
+        }
 
-        $issue->setDescription('Test issue description.')
-            ->setCode('AP-1')
-            ->setPriority($priority)
-            ->setResolution($resolution)
-            ->setSummary('Test issue summary.')
-        ;
-
-        $manager->persist($issue);
         $manager->flush();
     }
 

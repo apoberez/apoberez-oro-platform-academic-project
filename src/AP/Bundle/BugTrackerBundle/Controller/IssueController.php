@@ -51,6 +51,8 @@ class IssueController extends Controller
      */
     public function createAction()
     {
+        $issue = new Issue();
+        $issue->setAssignee($this->getUser());
         return $this->update(new Issue());
     }
 
@@ -95,7 +97,9 @@ class IssueController extends Controller
     {
         if ($this->get('ap.bug_tracker.subtask_add_permission_checker')->check($issue)) {
             $subtask = new Issue();
-            $subtask->setParentIssue($issue);
+            $subtask
+                ->setAssignee($this->getUser())
+                ->setParentIssue($issue);
             return $this->update($subtask);
         } else {
             throw new NotFoundHttpException();

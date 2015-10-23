@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\TagBundle\Entity\Taggable;
+use Oro\Bundle\UserBundle\Entity\User;
 
 /**
  * Class Issue
@@ -128,6 +129,22 @@ class Issue extends ExtendIssue implements Taggable
     protected $subtasks;
 
     /**
+     * @var User
+     *
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
+     * @ORM\JoinColumn(name="assignee", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $assignee;
+
+    /**
+     * @var User
+     *
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
+     * @ORM\JoinColumn(name="reporter_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $reporter;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(type="created_at", type="datetime")
@@ -206,6 +223,44 @@ class Issue extends ExtendIssue implements Taggable
     public function setSubtasks($subtasks)
     {
         $this->subtasks = $subtasks;
+
+        return $this;
+    }
+
+    /**
+     * @return User
+     */
+    public function getAssignee()
+    {
+        return $this->assignee;
+    }
+
+    /**
+     * @param User $assignee
+     * @return $this
+     */
+    public function setAssignee(User $assignee)
+    {
+        $this->assignee = $assignee;
+
+        return $this;
+    }
+
+    /**
+     * @return User
+     */
+    public function getReporter()
+    {
+        return $this->reporter;
+    }
+
+    /**
+     * @param User $reporter
+     * @return $this
+     */
+    public function setReporter($reporter)
+    {
+        $this->reporter = $reporter;
 
         return $this;
     }

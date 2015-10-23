@@ -5,6 +5,8 @@ namespace AP\Bundle\BugTrackerBundle\Form\Type;
 use AP\Bundle\BugTrackerBundle\Entity\Issue;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class IssueType extends AbstractType
@@ -34,9 +36,10 @@ class IssueType extends AbstractType
             ->add('type', 'choice', [
                 'label' => 'type',
                 'required' => true,
-                'choices' => Issue::getTypeNames()
+                'choices' => array_combine(Issue::getTypes(), Issue::getTypes())
             ]);
-        ;
+
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'onPreSetData']);
     }
 
     /**
@@ -47,6 +50,14 @@ class IssueType extends AbstractType
         $resolver->setDefaults([
             'data_class' => self::DATA_CLASS,
         ]);
+    }
+
+    /**
+     * @param FormEvent $event
+     */
+    public function onPreSetData(FormEvent $event)
+    {
+        $event->getData();
     }
 
     /**

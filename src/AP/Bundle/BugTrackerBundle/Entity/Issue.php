@@ -31,13 +31,9 @@ use Oro\Bundle\TagBundle\Entity\Taggable;
  */
 class Issue extends ExtendIssue implements Taggable
 {
-    const TYPE_STORY = 1;
-    const TYPE_BUG = 2;
-    const TYPE_IMPROVEMENT = 3;
-
-    const TYPE_STORY_LABEL = 'ap.bug_tracker.type.story';
-    const TYPE_BUG_LABEL = 'ap.bug_tracker.type.bug';
-    const TYPE_IMPROVEMENT_LABEL = 'ap.bug_tracker.type.improvement';
+    const TYPE_STORY = 'story';
+    const TYPE_BUG = 'bug';
+    const TYPE_IMPROVEMENT = 'improvement';
 
     /**
      * @return int[]
@@ -48,18 +44,6 @@ class Issue extends ExtendIssue implements Taggable
             static::TYPE_STORY,
             static::TYPE_BUG,
             static::TYPE_IMPROVEMENT,
-        ];
-    }
-
-    /**
-     * @return string[]
-     */
-    public static function getTypeNames()
-    {
-        return [
-            static::TYPE_STORY => static::TYPE_STORY_LABEL,
-            static::TYPE_BUG => static::TYPE_BUG_LABEL,
-            static::TYPE_IMPROVEMENT => static::TYPE_IMPROVEMENT_LABEL,
         ];
     }
 
@@ -87,16 +71,16 @@ class Issue extends ExtendIssue implements Taggable
     protected $description;
 
     /**
-     * @var integer
+     * @var string
      *
-     * @ORM\Column(type="integer", unique=true)
+     * @ORM\Column(type="integer", unique=true, nullable=true)
      */
     protected $code;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="issue_type", type="integer")
+     * @ORM\Column(name="issue_type", type="string")
      */
     protected $type;
 
@@ -171,7 +155,7 @@ class Issue extends ExtendIssue implements Taggable
     }
 
     /**
-     * @return int
+     * @return string
      */
     public function getCode()
     {
@@ -195,19 +179,7 @@ class Issue extends ExtendIssue implements Taggable
     }
 
     /**
-     * @return string
-     */
-    public function getTypeName()
-    {
-        if ($this->getType() && array_key_exists($this->getType(), self::getTypeNames())) {
-            return self::getTypeNames()[$this->getType()];
-        }
-
-        return null;
-    }
-
-    /**
-     * @param int $code
+     * @param string $code
      * @return $this
      */
     public function setCode($code)
@@ -319,8 +291,8 @@ class Issue extends ExtendIssue implements Taggable
      */
     public function prePersist()
     {
-        $this->createdAt = new \DateTime('now', new \DateTimeZone('UTC'));
-        $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
+        $this->setCreatedAt(new \DateTime('now', new \DateTimeZone('UTC')))
+            ->setUpdatedAt(new \DateTime('now', new \DateTimeZone('UTC')));
     }
 
     /**

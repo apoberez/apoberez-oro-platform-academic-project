@@ -6,7 +6,7 @@
     {% if canHaveSubtask and resource_granted('CREATE', entity) %}
         {{ UI.button({
             'path' : path('bug_tracker.issue_index', { id: entity.id }),
-            'label': 'ap.bug_tracker.button.create_subtask'
+            'label': 'ap.bug_tracker.button.create_subtask'|trans
         }) }}
     {% endif %}
 
@@ -47,7 +47,8 @@
                 <div class="responsive-block">
                     {{ UI.renderProperty('ap.bug_tracker.issue_entity.summary_label'|trans, entity.summary) }}
                     {{ UI.renderProperty('ap.bug_tracker.issue_entity.description_label'|trans, entity.description) }}
-                    {{ UI.renderProperty('ap.bug_tracker.issue_entity.type_label'|trans, entity.typeName) }}
+                    {{ UI.renderProperty('ap.bug_tracker.issue_entity.priority_label'|trans, entity.priority.name|trans) }}
+                    {{ UI.renderProperty('ap.bug_tracker.issue_entity.type_label'|trans, entity.type|trans) }}
 
                     {% if resource_granted('oro_tag_view') %}
                         {{ UI.renderHtmlProperty('oro.tag.entity_plural_label'|trans, tag.renderView(entity)) }}

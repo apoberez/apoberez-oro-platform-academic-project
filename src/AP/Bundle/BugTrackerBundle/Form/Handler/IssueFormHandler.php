@@ -30,6 +30,7 @@ class IssueFormHandler implements FormHandlerInterface, TagHandlerInterface
      */
     public function handleAfterFlush(Issue $issue)
     {
+        $issue->setCode(sprintf('%s-%s', mb_strtoupper($issue->getType()), $issue->getId()));
         $this->tagManager->saveTagging($issue);
     }
 }

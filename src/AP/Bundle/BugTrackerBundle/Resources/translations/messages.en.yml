@@ -32,6 +32,7 @@ ap:
             #properties:
             summary_label:          Summary
             description_label:      Description
+            priority_label:         Priority
             type_label:             Type
             created_at_label:       Created at
             updated_at_label:       Updated at

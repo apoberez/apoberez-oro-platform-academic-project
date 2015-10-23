@@ -66,15 +66,10 @@ class IssueTest extends \PHPUnit_Framework_TestCase
 
     public function testGetTypes()
     {
-        $this->assertEquals(Issue::getTypes(), [1, 2, 3]);
-    }
-
-    public function testGetTypeNames()
-    {
-        $this->assertSame(Issue::getTypeNames(), [
-            1 => 'ap.bug_tracker.type.story',
-            2 => 'ap.bug_tracker.type.bug',
-            3 => 'ap.bug_tracker.type.improvement'
+        $this->assertEquals(Issue::getTypes(), [
+            'ap.bug_tracker.type.story',
+            'ap.bug_tracker.type.bug',
+            'ap.bug_tracker.type.improvement'
         ]);
     }
 

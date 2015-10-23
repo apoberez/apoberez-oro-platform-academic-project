@@ -11,7 +11,7 @@ datagrid:
                     - priority.name as priorityName
                     - priority.order as priorityOrder
                     - resolution.name as resolutionName
-#                    - issue.type
+                    - issue.type
 #                    - issue.status
                     - issue.createdAt
                     - issue.updatedAt
@@ -23,10 +23,12 @@ datagrid:
                         - { join: issue.resolution, alias: resolution}
 
         columns:
-#            code:
-#                label: Code
+            code:
+                label: Code
             summary:
                 label: Summary
+            type:
+                label: Type
             priorityName:
                 label: Priority
             resolutionName:

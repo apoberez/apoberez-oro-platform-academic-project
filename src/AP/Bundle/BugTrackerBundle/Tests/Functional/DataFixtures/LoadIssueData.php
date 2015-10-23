@@ -24,8 +24,9 @@ class LoadIssueData extends AbstractFixture implements DependentFixtureInterface
         for ($i = 1; $i < 21; $i++) {
             $issue = new Issue();
             $issue->setDescription("Test issue $i description.")
-                ->setCode("AP-$i")
+                ->setCode("BUG-$i")
                 ->setPriority($priority)
+                ->setType(Issue::TYPE_STORY)
                 ->setResolution($resolution)
                 ->setSummary("Test issue $i summary.")
             ;

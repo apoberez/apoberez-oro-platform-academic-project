@@ -5,7 +5,7 @@
 {% block navButtons %}
     {% if canHaveSubtask and resource_granted('CREATE', entity) %}
         {{ UI.button({
-            'path' : path('bug_tracker.issue_index', { id: entity.id }),
+            'path' : path('bug_tracker.issue_subtask_create', { id: entity.id }),
             'label': 'ap.bug_tracker.button.create_subtask'|trans
         }) }}
     {% endif %}

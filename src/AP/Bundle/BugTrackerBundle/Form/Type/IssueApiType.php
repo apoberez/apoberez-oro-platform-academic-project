@@ -5,6 +5,7 @@ namespace AP\Bundle\BugTrackerBundle\Form\Type;
 
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
+/** todo add parent for subtasks */
 class IssueApiType extends IssueType
 {
     const NAME = 'issue';

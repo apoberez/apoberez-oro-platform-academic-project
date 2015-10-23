@@ -3,6 +3,7 @@
 
 namespace AP\Bundle\BugTrackerBundle\Tests\Functional\Controller;
 
+use AP\Bundle\BugTrackerBundle\Entity\Issue;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Symfony\Component\DomCrawler\Form;
 
@@ -53,6 +54,7 @@ class IssueControllerTest extends WebTestCase
         $form['bug_tracker_issue[summary]'] = 'Issue Summary';
         $form['bug_tracker_issue[description]'] = 'Test create new issue.';
         $form['bug_tracker_issue[priority]'] = $priority->getId();
+        $form['bug_tracker_issue[type]'] = 'story';
         $form['bug_tracker_issue[tags][all]'] =
             '[{"id":"Test","name":"Test","owner":true,"notSaved":true,"moreOwners":false,"url":""}]';
         $form['bug_tracker_issue[tags][owner]'] =
@@ -67,6 +69,15 @@ class IssueControllerTest extends WebTestCase
 
         //todo assert entity in db
         //todo assert tag association
+    }
+
+    public function testCreateSubtask()
+    {
+        $doctrine = $this->getContainer()->get('doctrine.orm.entity_manager');
+        $parent = $doctrine->getRepository('APBugTrackerBundle:Issue')->findOneBy(['type' => Issue::TYPE_STORY]);
+
+        $crawler = $this->client->request('GET', '/bug-tracker/issue/' . $parent->getId() . '/subtask');
+        $this->assertTrue('');
     }
 
     public function testViewIssue()

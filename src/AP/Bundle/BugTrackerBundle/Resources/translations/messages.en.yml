@@ -11,7 +11,8 @@ ap:
         type:
             story: Story
             bug: Bug
-            improvement: Improvement
+            task: Task
+            subtask: Subtask
 
         menu:
             bug_tracker_tab:    Bug tracker

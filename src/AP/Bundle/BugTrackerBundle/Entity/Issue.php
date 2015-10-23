@@ -33,7 +33,8 @@ class Issue extends ExtendIssue implements Taggable
 {
     const TYPE_STORY = 'story';
     const TYPE_BUG = 'bug';
-    const TYPE_IMPROVEMENT = 'improvement';
+    const TYPE_SUBTASK = 'subtask';
+    const TYPE_TASK = 'task';
 
     /**
      * @return int[]
@@ -43,7 +44,18 @@ class Issue extends ExtendIssue implements Taggable
         return [
             static::TYPE_STORY,
             static::TYPE_BUG,
-            static::TYPE_IMPROVEMENT,
+            static::TYPE_SUBTASK,
+            static::TYPE_TASK,
+        ];
+    }
+
+    /**
+     * @return int[]
+     */
+    public static function getSubtaskTypes()
+    {
+        return [
+            static::TYPE_SUBTASK,
         ];
     }
 
@@ -54,7 +66,7 @@ class Issue extends ExtendIssue implements Taggable
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    protected $id;
+    private $id;
 
     /**
      * @var string
@@ -73,12 +85,12 @@ class Issue extends ExtendIssue implements Taggable
     /**
      * @var string
      *
-     * @ORM\Column(type="integer", unique=true, nullable=true)
+     * @ORM\Column(type="string", unique=true, nullable=true)
      */
     protected $code;
 
     /**
-     * @var integer
+     * @var string
      *
      * @ORM\Column(name="issue_type", type="string")
      */
@@ -99,6 +111,21 @@ class Issue extends ExtendIssue implements Taggable
      * @ORM\JoinColumn(name="resolution_id", referencedColumnName="id")
      */
     protected $resolution;
+
+    /**
+     * @var Issue
+     *
+     * @ORM\ManyToOne(targetEntity="Issue", inversedBy="subtasks")
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
+     */
+    protected $parentIssue;
+
+    /**
+     * @var ArrayCollection;
+     *
+     * @ORM\OneToMany(targetEntity="Issue", mappedBy="parentIssue")
+     */
+    protected $subtasks;
 
     /**
      * @var \DateTime
@@ -128,11 +155,59 @@ class Issue extends ExtendIssue implements Taggable
     protected $tags;
 
     /**
+     * Issue constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->subtasks = new ArrayCollection();
+    }
+
+    /**
      * @return int
      */
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @return Issue
+     */
+    public function getParentIssue()
+    {
+        return $this->parentIssue;
+    }
+
+    /**
+     * @param Issue $parentIssue
+     * @return $this
+     */
+    public function setParentIssue($parentIssue)
+    {
+        $this->parentIssue = $parentIssue;
+
+        return $this;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getSubtasks()
+    {
+        return $this->subtasks;
+    }
+
+    /**
+     * @param ArrayCollection $subtasks
+     * @return $this
+     */
+    public function setSubtasks($subtasks)
+    {
+        $this->subtasks = $subtasks;
+
+        return $this;
     }
 
     /**
@@ -163,7 +238,7 @@ class Issue extends ExtendIssue implements Taggable
     }
 
     /**
-     * @return int
+     * @return string
      */
     public function getType()
     {
@@ -171,11 +246,14 @@ class Issue extends ExtendIssue implements Taggable
     }
 
     /**
-     * @param int $type
+     * @param string $type
+     * @return $this
      */
     public function setType($type)
     {
         $this->type = $type;
+
+        return $this;
     }
 
     /**

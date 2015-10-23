@@ -23,8 +23,7 @@ services:
 
     ap.bug_tracker.form.issue:
         class: Symfony\Component\Form\Form
-        factory_method: createNamed
+        factory_method: create
         factory_service: form.factory
         arguments:
-            - ~
             - 'bug_tracker_issue'

@@ -53,7 +53,8 @@ class IssueControllerTest extends WebTestCase
         $requestData = [
             'summary' => 'Test API create issue method summary',
             'description' => 'Test API create issue method description',
-            'priority' => $priority->getId()
+            'priority' => $priority->getId(),
+            'type' => 'story'
         ];
         $this->client->request('POST', '/api/rest/latest/bug-tracker/issues', $requestData);
 

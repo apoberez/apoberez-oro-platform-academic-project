@@ -4,11 +4,12 @@
 namespace AP\Bundle\BugTrackerBundle\Controller;
 
 use AP\Bundle\BugTrackerBundle\Entity\Issue;
-use AP\Bundle\BugTrackerBundle\Form\Type\IssueType;
 
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
+
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -85,14 +86,32 @@ class IssueController extends Controller
     }
 
     /**
+     * @Route("/{id}/subtask", name="bug_tracker.issue_subtask_create", requirements={"id"="\d+"})
+     * @Template("APBugTrackerBundle:Issue:update.html.twig")
+     * @param Issue $issue
+     * @return array
+     */
+    public function createSubtasckAction(Issue $issue)
+    {
+        if ($this->get('ap.bug_tracker.subtask_add_permission_checker')->check($issue)) {
+            $subtask = new Issue();
+            $subtask->setParentIssue($issue);
+            return $this->update($subtask);
+        } else {
+            throw new NotFoundHttpException();
+        }
+    }
+
+    /**
      * @param Issue $issue
      * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
      */
     protected function update(Issue $issue)
     {
-        $form = $this->createForm(IssueType::NAME, $issue);
+        $handler = $this->get('ap.bug_tracker.issue_form_handler');
+        $form = $handler->getForm();
 
-        return $this->get('oro_form.model.update_handler')->handleUpdate(
+        return  $this->get('oro_form.model.update_handler')->handleUpdate(
             $issue,
             $form,
             function (Issue $issue) {
@@ -107,7 +126,8 @@ class IssueController extends Controller
                     'parameters' => ['id' => $issue->getId()]
                 ];
             },
-            $this->get('translator')->trans('ap.bug_tracker.controller.issue.saved_message')
+            $this->get('translator')->trans('ap.bug_tracker.controller.issue.saved_message'),
+            $handler
         );
     }
 }

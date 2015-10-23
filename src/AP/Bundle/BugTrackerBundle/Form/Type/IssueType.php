@@ -7,6 +7,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class IssueType extends AbstractType
@@ -22,22 +23,24 @@ class IssueType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('summary', 'text')
-            ->add('description', 'text', [
-                'required' => false
+            ->add('summary', 'text', [
+                'label' => 'ap.bug_tracker.issue_entity.summary_label'
+            ])
+            ->add('description', 'textarea', [
+                'required' => false,
+                'label' => 'ap.bug_tracker.issue_entity.description_label'
             ])
             ->add('priority', 'entity', [
                 'class' => 'AP\Bundle\BugTrackerBundle\Entity\Priority',
                 'required' => true,
+                'label' => 'ap.bug_tracker.issue_entity.priority_label'
             ])
             ->add('tags', 'oro_tag_select', [
                 'label' => 'oro.tag.entity_plural_label'
-            ])
-            ->add('type', 'choice', [
-                'label' => 'type',
-                'required' => true,
-                'choices' => array_combine(Issue::getTypes(), Issue::getTypes())
             ]);
+
+        $types = array_combine(Issue::getTypes(), Issue::getTypes());
+        $this->addTypeField($builder, $types);
 
         $builder->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'onPreSetData']);
     }
@@ -49,6 +52,7 @@ class IssueType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => self::DATA_CLASS,
+            'intention' => 'issue_item'
         ]);
     }
 
@@ -57,7 +61,12 @@ class IssueType extends AbstractType
      */
     public function onPreSetData(FormEvent $event)
     {
-        $event->getData();
+        /** @var Issue $issue */
+        $issue = $event->getData();
+        if ($issue && $issue->getParentIssue()) {
+            $data = array_combine(Issue::getSubtaskTypes(), Issue::getSubtaskTypes());
+            $this->addTypeField($event->getForm(), $data);
+        }
     }
 
     /**
@@ -68,5 +77,17 @@ class IssueType extends AbstractType
     public function getName()
     {
         return static::NAME;
+    }
+
+    /**
+     * @param FormBuilderInterface|FormInterface $builder
+     * @param array $data
+     */
+    protected function addTypeField($builder, array $data)
+    {
+        $builder->add('type', 'choice', [
+            'label' => 'ap.bug_tracker.issue_entity.type_label',
+            'choices' => $data
+        ]);
     }
 }

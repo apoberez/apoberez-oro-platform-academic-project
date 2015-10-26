@@ -30,7 +30,7 @@ use Oro\Bundle\UserBundle\Entity\User;
  *      }
  * )
  */
-class Issue extends ExtendIssue implements Taggable
+class Issue extends ExtendIssue implements Taggable, CollaboratorAwareInterface
 {
     const TYPE_STORY = 'story';
     const TYPE_BUG = 'bug';
@@ -293,7 +293,9 @@ class Issue extends ExtendIssue implements Taggable
      */
     public function addCollaborator(User $user)
     {
-        $this->collaborators->add($user);
+        if (!$this->collaborators->contains($user)) {
+            $this->collaborators->add($user);
+        }
 
         return $this;
     }
@@ -468,8 +470,8 @@ class Issue extends ExtendIssue implements Taggable
      */
     public function prePersist()
     {
-        $this->setCreatedAt(new \DateTime('now', new \DateTimeZone('UTC')))
-            ->setUpdatedAt(new \DateTime('now', new \DateTimeZone('UTC')));
+        $this->preUpdate();
+        $this->setCreatedAt(new \DateTime('now', new \DateTimeZone('UTC')));
     }
 
     /**
@@ -478,7 +480,9 @@ class Issue extends ExtendIssue implements Taggable
      */
     public function preUpdate()
     {
-        $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
+        $this->setUpdatedAt(new \DateTime('now', new \DateTimeZone('UTC')))
+            ->addCollaborator($this->getAssignee())
+            ->addCollaborator($this->getReporter());
     }
 
     /**

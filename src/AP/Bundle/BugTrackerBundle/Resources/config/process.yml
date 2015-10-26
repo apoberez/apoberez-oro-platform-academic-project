@@ -1,0 +1,19 @@
+definitions:
+    note_creation:
+        label: 'Note creation'
+        enabled: true
+        entity: Oro\Bundle\NoteBundle\Entity\Note
+        order: 20
+        actions_configuration:
+            - @tree:
+                conditions:
+                    @instanceof: [$.data.target, AP\Bundle\BugTrackerBundle\Entity\CollaboratorAwareInterface]
+                actions:
+                    - @call_method:
+                        object: $.data.target
+                        method: addCollaborator
+                        method_parameters: [$.data.owner]
+triggers:
+    note_creation:
+        -
+            event: create

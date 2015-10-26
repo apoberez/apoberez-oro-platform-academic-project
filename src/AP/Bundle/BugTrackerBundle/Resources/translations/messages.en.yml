@@ -38,6 +38,8 @@ ap:
 
             #properties:
             summary_label:          Summary
+            reporter_label:         Reporter
+            assignee_label:         Assignee
             description_label:      Description
             priority_label:         Priority
             type_label:             Type

@@ -1,4 +1,4 @@
-<?php
+    <?php
 
 // Need to trace all kind of errors
 error_reporting(-1);

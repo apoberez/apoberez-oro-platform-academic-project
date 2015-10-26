@@ -131,7 +131,6 @@ class IssueFormHandler implements TagHandlerInterface
         $this->entityManager->beginTransaction();
 
         try {
-
             $this->entityManager->persist($issue);
             $this->dispatcher->dispatch(Events::BEFORE_FLUSH, new AfterFormProcessEvent($this->getForm(), $issue));
             $this->entityManager->flush();
@@ -143,11 +142,6 @@ class IssueFormHandler implements TagHandlerInterface
         }
 
         $this->handleAfterFlush($issue);
-    }
-
-    protected function handleBeforeSave(Issue $issue)
-    {
-//        $issue->
     }
 
     /**

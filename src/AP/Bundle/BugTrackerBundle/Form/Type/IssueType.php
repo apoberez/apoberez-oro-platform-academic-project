@@ -42,6 +42,9 @@ class IssueType extends AbstractType
         $builder->add('assignee', 'oro_user_organization_acl_select', [
                 'required' => false,
                 'label' => 'orocrm.contact.assigned_to.label'
+            ])->add('reporter', 'oro_user_organization_acl_select', [
+                'required' => false,
+                'label' => 'orocrm.contact.assigned_to.label'
             ]);
 
         $types = array_combine(Issue::getTypes(), Issue::getTypes());

@@ -12,7 +12,6 @@ datagrid:
                     - priority.order as priorityOrder
                     - resolution.name as resolutionName
                     - issue.type
-#                    - issue.status
                     - issue.createdAt
                     - issue.updatedAt
                 from:
@@ -94,3 +93,49 @@ datagrid:
                 icon: trash
         options:
             entity_pagination: true
+
+    dashboard-active-issues-grid:
+        source:
+            acl_resource: bug_tracker.issue_view
+            type: orm
+            query:
+                select:
+                    - issue.id
+                    - issue.code
+                    - issue.summary
+                    - priority.name as priorityName
+                    - priority.order as priorityOrder
+                    - resolution.name as resolutionName
+                    - issue.type
+                    - issue.createdAt
+                    - issue.updatedAt
+                from:
+                    - { table: APBugTrackerBundle:Issue, alias: issue }
+                join:
+                    left:
+                        - { join: issue.priority, alias: priority}
+                        - { join: issue.resolution, alias: resolution}
+
+        columns:
+            code:
+                label: Code
+            summary:
+                label: Summary
+            type:
+                label: Type
+            priorityName:
+                label: Priority
+            resolutionName:
+                label: Resolution
+            createdAt:
+                label: Created
+                frontend_type: date
+            updatedAt:
+                label: Updated
+                frontend_type: date
+        options:
+            toolbarOptions:
+                hide: true
+                pageSize:
+                    items: [10]
+                    default_per_page: 10

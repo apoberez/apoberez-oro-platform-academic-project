@@ -52,8 +52,9 @@ class IssueController extends Controller
     public function createAction()
     {
         $issue = new Issue();
+        $issue->setReporter($this->getUser());
         $issue->setAssignee($this->getUser());
-        return $this->update(new Issue());
+        return $this->update($issue);
     }
 
     /**

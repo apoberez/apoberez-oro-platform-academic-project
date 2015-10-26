@@ -1,0 +1,17 @@
+oro_dashboard_config:
+    widgets:
+        active_issues:
+            label: ap.bug_tracker.dashboard.active_issues.title
+            description: ap.bug_tracker.dashboard.active_issues.description
+            route: oro_dashboard_widget
+            route_parameters: { bundle: APBugTrackerBundle, name: activeIssues }
+            acl: bug_tracker.issue_view
+            #todo icon
+
+#        issues_by_status_chart:
+#            label: ap.bug_tracker.dashboard.issues_by_status_chart.title
+#            description: ap.bug_tracker.dashboard.issues_by_status_chart.description
+#            route: oro_dashboard_widget
+#            route_parameters: { bundle: APBugTrackerBundle, name: issuesByStatus }
+#            acl: bug_tracker.issue_view
+#            #todo icon

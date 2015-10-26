@@ -1,0 +1,19 @@
+{% extends 'OroDashboardBundle:Dashboard:widget.html.twig' %}
+{% import 'OroDataGridBundle::macros.html.twig' as dataGrid %}
+
+{% block content %}
+    {{ dataGrid.renderGrid('dashboard-active-issues-grid') }}
+    <script type="text/javascript">
+        require(['orocrm/call/info-opener']);
+    </script>
+{% endblock %}
+
+{% block actions %}
+    {% set actions = [{
+    'url': path('bug_tracker.issue_index'),
+    'type': 'link',
+    'label': 'orocrm.dashboard.recent_calls.view_all'|trans
+    }] %}
+
+    {{ parent() }}
+{% endblock %}

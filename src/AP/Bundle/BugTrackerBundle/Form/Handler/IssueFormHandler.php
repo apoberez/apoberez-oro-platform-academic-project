@@ -83,7 +83,7 @@ class IssueFormHandler implements TagHandlerInterface
         if ($event->isFormProcessInterrupted()) {
             return null;
         }
-        $issue = $this->prepareFormData($issue);
+        $this->form->setData($issue);
 
         if (in_array($this->request->getMethod(), ['POST', 'PUT'], true)) {
             $event = new FormProcessEvent($this->form, $issue);
@@ -123,18 +123,6 @@ class IssueFormHandler implements TagHandlerInterface
     }
 
     /**
-     * @param mixed $entity
-     *
-     * @return mixed The instance of form data object
-     */
-    protected function prepareFormData($entity)
-    {
-        $this->form->setData($entity);
-
-        return $entity;
-    }
-
-    /**
      * @param Issue $issue
      * @throws \Exception
      */
@@ -143,6 +131,7 @@ class IssueFormHandler implements TagHandlerInterface
         $this->entityManager->beginTransaction();
 
         try {
+
             $this->entityManager->persist($issue);
             $this->dispatcher->dispatch(Events::BEFORE_FLUSH, new AfterFormProcessEvent($this->getForm(), $issue));
             $this->entityManager->flush();
@@ -156,6 +145,11 @@ class IssueFormHandler implements TagHandlerInterface
         $this->handleAfterFlush($issue);
     }
 
+    protected function handleBeforeSave(Issue $issue)
+    {
+//        $issue->
+    }
+
     /**
      * @param Issue $issue
      * @return bool
@@ -163,7 +157,7 @@ class IssueFormHandler implements TagHandlerInterface
      * If more complex logic will appear
      * it's recommended create event
      */
-    public function handleAfterFlush(Issue $issue)
+    protected function handleAfterFlush(Issue $issue)
     {
         $issue->setCode(sprintf('%s-%s', mb_strtoupper($issue->getType()), $issue->getId()));
         $this->entityManager->persist($issue);

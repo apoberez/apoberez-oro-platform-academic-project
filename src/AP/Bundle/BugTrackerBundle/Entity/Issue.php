@@ -145,6 +145,19 @@ class Issue extends ExtendIssue implements Taggable
     protected $reporter;
 
     /**
+     * @var ArrayCollection
+     *
+     * @ORM\ManyToMany(targetEntity="Oro\Bundle\UserBundle\Entity\User")
+     * @ORM\JoinTable(
+     *     name="issues_collaborators",
+     *     joinColumns={@ORM\JoinColumn(name="issue_id", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")}
+     * )
+     *
+     */
+    protected $collaborators;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(type="created_at", type="datetime")
@@ -179,6 +192,7 @@ class Issue extends ExtendIssue implements Taggable
         parent::__construct();
 
         $this->subtasks = new ArrayCollection();
+        $this->collaborators = new ArrayCollection();
     }
 
     /**
@@ -252,6 +266,36 @@ class Issue extends ExtendIssue implements Taggable
     public function getReporter()
     {
         return $this->reporter;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getCollaborators()
+    {
+        return $this->collaborators;
+    }
+
+    /**
+     * @param ArrayCollection $collaborators
+     * @return $this
+     */
+    public function setCollaborators($collaborators)
+    {
+        $this->collaborators = $collaborators;
+
+        return $this;
+    }
+
+    /**
+     * @param User $user
+     * @return $this
+     */
+    public function addCollaborator(User $user)
+    {
+        $this->collaborators->add($user);
+
+        return $this;
     }
 
     /**

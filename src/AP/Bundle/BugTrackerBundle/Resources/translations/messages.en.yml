@@ -1,5 +1,11 @@
 ap:
     bug_tracker:
+
+        dashboard:
+            active_issues:
+                title: Active Issues
+                description: List of last 10 active issues, where user is collaborator.
+
         priority:
             high: High
             medium: Medium

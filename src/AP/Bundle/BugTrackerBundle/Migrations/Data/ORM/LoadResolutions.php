@@ -11,25 +11,32 @@ use Doctrine\Common\Persistence\ObjectManager;
 class LoadResolutions extends AbstractFixture
 {
     /**
-     * @var array
-     */
-    protected static $data = [
-        [
-            'name' => 'ap.bug_tracker.resolution.fixed',
-            'description' => 'A fix for this issue is checked in tree and tested.',
-            'order' => 1
-        ],
-        [
-            'name' => 'ap.bug_tracker.resolution.duplicate',
-            'description' => 'The problem is duplicate of existing issue.',
-            'order' => 2
-        ],
-        [
-            'name' => 'ap.bug_tracker.resolution.will_not_fix',
-            'description' => 'The problem described is an issue which will never be fixed.',
-            'order' => 3
-        ]
-    ];
+    * @return array
+    */
+    protected function createPriorities()
+    {
+        $priorities = [];
+
+        $priorities[] = (new Resolution())
+            ->setName('fixed')
+            ->setLabel('Fixed')
+            ->setDescription('A fix for this issue is checked in tree and tested.')
+            ->setOrder(1);
+
+        $priorities[] = (new Resolution())
+            ->setName('duplicate')
+            ->setLabel('Duplicate')
+            ->setDescription('he problem is duplicate of existing issue.')
+            ->setOrder(2);
+
+        $priorities[] = (new Resolution())
+            ->setName('will_not_fix')
+            ->setLabel('Won\'t fix')
+            ->setDescription('The problem described is an issue which will never be fixed.')
+            ->setOrder(3);
+
+        return $priorities;
+    }
 
     /**
      * Load data fixtures with the passed EntityManager
@@ -38,13 +45,8 @@ class LoadResolutions extends AbstractFixture
      */
     public function load(ObjectManager $manager)
     {
-        foreach (static::$data as $resolutionData) {
-            $entity = new Resolution();
-            $entity->setName($resolutionData['name'])
-                ->setDescription($resolutionData['description'])
-                ->setOrder($resolutionData['order']);
-
-            $manager->persist($entity);
+        foreach ($this->createPriorities() as $priority) {
+            $manager->persist($priority);
         }
 
         $manager->flush();

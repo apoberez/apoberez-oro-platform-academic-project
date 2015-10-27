@@ -11,25 +11,32 @@ use Doctrine\Common\Persistence\ObjectManager;
 class LoadPriorities extends AbstractFixture
 {
     /**
-     * @var array
+     * @return array
      */
-    protected static $data = [
-        [
-            'name' => 'ap.bug_tracker.priority.high',
-            'description' => 'Serious problem that could block progress.',
-            'order' => 3
-        ],
-        [
-            'name' => 'ap.bug_tracker.priority.medium',
-            'description' => 'Has a problem to affect progress.',
-            'order' => 2
-        ],
-        [
-            'name' => 'ap.bug_tracker.priority.low',
-            'description' => 'Minor problem or easily worked around.',
-            'order' => 1
-        ]
-    ];
+    protected function createPriorities()
+    {
+        $priorities = [];
+
+        $priorities[] = (new Priority())
+            ->setName('critical')
+            ->setLabel('Critical')
+            ->setDescription('Serious problem that could block progress.')
+            ->setOrder(1);
+
+        $priorities[] = (new Priority())
+            ->setName('major')
+            ->setLabel('Major')
+            ->setDescription('Has a problem to affect progress.')
+            ->setOrder(2);
+
+        $priorities[] = (new Priority())
+            ->setName('trivial')
+            ->setLabel('Trivial')
+            ->setDescription('Minor problem or easily worked around.')
+            ->setOrder(3);
+
+        return $priorities;
+    }
 
     /**
      * Load data fixtures with the passed EntityManager
@@ -38,13 +45,8 @@ class LoadPriorities extends AbstractFixture
      */
     public function load(ObjectManager $manager)
     {
-        foreach (static::$data as $priorityData) {
-            $entity = new Priority();
-            $entity->setName($priorityData['name'])
-                ->setDescription($priorityData['description'])
-                ->setOrder($priorityData['order']);
-
-            $manager->persist($entity);
+        foreach ($this->createPriorities() as $priority) {
+            $manager->persist($priority);
         }
 
         $manager->flush();

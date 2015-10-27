@@ -7,21 +7,40 @@ use AP\Component\TestUtils\Entity\EntityTestCaseTrait;
 
 class ResolutionTest extends \PHPUnit_Framework_TestCase
 {
+
     use EntityTestCaseTrait;
 
+    /**
+     * @var array
+     */
+    protected static $testData = [
+        'id' => 1,
+        'name' => 'fixed',
+        'label' => 'Fixed',
+        'order' => '1',
+        'description' => 'Issue fixed.'
+    ];
 
-    public function testProperties()
+    public function testEntityGetters()
     {
-        $testData = [
-            'id' => 1,
-            'name' => 'Incomplete',
-            'order' => '4',
-            'description' => 'The problem is not completely described.'
-        ];
+        $entity = $this->getEntity(self::$testData);
 
-        $entity = $this->getEntity($testData);
+        $this->assertEntityGetters($entity, self::$testData);
+    }
 
-        $this->assertEntityGetters($entity, $testData);
+    public function testEntitySetters()
+    {
+        $testData = self::$testData;
+        unset($testData['id']);
+
+        $this->assertEntitySetters(new Resolution(), $testData);
+    }
+
+    public function testToString()
+    {
+        $entity = $this->getEntity(self::$testData);
+
+        $this->assertSame('Fixed', (string) $entity);
     }
 
     /**

@@ -1,0 +1,5 @@
+{% if record.getValue(userIdAlias) is not empty and resource_granted('oro_user_user_view') %}
+    <a href="{{ path('oro_user_view', {id: record.getValue(userIdAlias)}) }}">{{ value }}</a>
+{% else %}
+    {{ value }}
+{% endif %}

@@ -1,10 +1,15 @@
 ap:
+    bugtracker:
+        issue:
+            entity_label: Issue
     bug_tracker:
-
         dashboard:
             active_issues:
                 title: Active Issues
                 description: List of last 10 active issues, where user is collaborator.
+            issues_by_status_chart:
+                title: Issues by status
+                description: Char of issues by workflow status.
 
         priority:
             high: High

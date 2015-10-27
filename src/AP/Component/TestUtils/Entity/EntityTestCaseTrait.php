@@ -41,7 +41,8 @@ trait EntityTestCaseTrait
         $reflectionClass = new \ReflectionClass(get_class($entity));
 
         foreach ($dataToSet as $propertyName => $value) {
-            $entity->{'set' . ucfirst($propertyName)}($value);
+            $result = $entity->{'set' . ucfirst($propertyName)}($value);
+            \PHPUnit_Framework_TestCase::assertSame($entity, $result);
         }
 
         foreach ($expectedData as $propertyName => $value) {

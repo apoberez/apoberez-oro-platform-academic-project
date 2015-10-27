@@ -9,19 +9,37 @@ class PriorityTest extends \PHPUnit_Framework_TestCase
 {
     use EntityTestCaseTrait;
 
+    /**
+     * @var array
+     */
+    protected static $testData = [
+        'id' => 1,
+        'name' => 'low',
+        'label' => 'Low',
+        'order' => '1',
+        'description' => 'Minor problem.'
+    ];
 
-    public function testProperties()
+    public function testEntityGetters()
     {
-        $testData = [
-            'id' => 1,
-            'name' => 'Low',
-            'order' => '1',
-            'description' => 'Minor problem.'
-        ];
+        $entity = $this->getEntity(self::$testData);
 
-        $entity = $this->getEntity($testData);
+        $this->assertEntityGetters($entity, self::$testData);
+    }
 
-        $this->assertEntityGetters($entity, $testData);
+    public function testEntitySetters()
+    {
+        $testData = self::$testData;
+        unset($testData['id']);
+
+        $this->assertEntitySetters(new Priority(), $testData);
+    }
+
+    public function testToString()
+    {
+        $entity = $this->getEntity(self::$testData);
+
+        $this->assertSame('Low', (string) $entity);
     }
 
     /**

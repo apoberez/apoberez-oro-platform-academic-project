@@ -26,9 +26,16 @@ class Resolution
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", nullable=true)
+     * @ORM\Column(name="name", type="string", unique=true)
      */
     protected $name;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="label", type="string")
+     */
+    protected $label;
 
     /**
      * @var string
@@ -50,6 +57,25 @@ class Resolution
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLabel()
+    {
+        return $this->label;
+    }
+
+    /**
+     * @param string $label
+     * @return $this
+     */
+    public function setLabel($label)
+    {
+        $this->label = $label;
+
+        return $this;
     }
 
     /**
@@ -114,6 +140,6 @@ class Resolution
      */
     public function __toString()
     {
-        return $this->getName();
+        return (string)$this->getLabel();
     }
 }

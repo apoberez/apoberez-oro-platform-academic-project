@@ -8,6 +8,9 @@ use AP\Bundle\BugTrackerBundle\Entity\Priority;
 use AP\Bundle\BugTrackerBundle\Entity\Resolution;
 use AP\Component\TestUtils\Entity\EntityTestCaseTrait;
 use Doctrine\Common\Collections\ArrayCollection;
+use Oro\Bundle\UserBundle\Entity\User;
+use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
+use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
 
 class IssueTest extends \PHPUnit_Framework_TestCase
 {
@@ -23,12 +26,20 @@ class IssueTest extends \PHPUnit_Framework_TestCase
         $this->entityTestData = [
             'summary' => 'Test properties access method for Issue entity.',
             'description' => 'Test properties access method for Issue entity description.',
-            'code' => 1,
+            'code' => 'TASK-1',
             'priority' => new Priority(),
-            'type' => 1,
+            'type' => 'story',
             'resolution' => new Resolution(),
+            'parentIssue' => new Issue(),
             'createdAt' => new \DateTime(),
+            'subtasks' => new ArrayCollection(),
             'updatedAt' => new \DateTime(),
+            'assignee' => new User(),
+            'reporter' => new User(),
+            'collaborators' => new ArrayCollection(),
+            'tags' => new ArrayCollection(),
+            'workflowItem' => new WorkflowItem(),
+            'workflowStep' => new WorkflowStep()
         ];
     }
 
@@ -39,10 +50,17 @@ class IssueTest extends \PHPUnit_Framework_TestCase
 
     public function testIssueGetters()
     {
-        $testData = array_merge(['id' => 1], $this->entityTestData);
+        $testData = array_merge([
+            'id' => 1
+        ], $this->entityTestData);
         $entity = $this->createEntity($testData);
 
         $this->assertEntityGetters($entity, $testData);
+    }
+
+    public function testIssueSetters()
+    {
+        $this->assertEntitySetters(new Issue(), $this->entityTestData);
     }
 
     public function testIssueTags()
@@ -56,6 +74,31 @@ class IssueTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($issue->getTags(), $testCollection);
     }
 
+    public function testAddCollaborator()
+    {
+        $entity = $this->createEntity($this->entityTestData);
+        $collaborator1 = new User();
+        $collaborator2 = new User();
+
+        $entity->addCollaborator($collaborator1);
+        $addResult = $entity->addCollaborator($collaborator2);
+
+        $this->assertSame($addResult, $entity);
+
+        $this->assertSame(2, $entity->getCollaborators()->count());
+    }
+
+    public function testCollaboratorCanNotBeRepeated()
+    {
+        $entity = $this->createEntity($this->entityTestData);
+        $collaborator = new User();
+
+        $entity->addCollaborator($collaborator);
+        $entity->addCollaborator($collaborator);
+
+        $this->assertSame(1, $entity->getCollaborators()->count());
+    }
+
     public function testToString()
     {
         $issue = new Issue();
@@ -67,10 +110,27 @@ class IssueTest extends \PHPUnit_Framework_TestCase
     public function testGetTypes()
     {
         $this->assertEquals(Issue::getTypes(), [
-            'ap.bug_tracker.type.story',
-            'ap.bug_tracker.type.bug',
-            'ap.bug_tracker.type.improvement'
+            'story',
+            'bug',
+            'subtask',
+            'task'
         ]);
+    }
+
+    public function testGetSubtaskTypes()
+    {
+        $this->assertEquals(Issue::getSubtaskTypes(), [
+            'subtask',
+        ]);
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testSetTypeValidation()
+    {
+        $entity = new Issue();
+        $entity->setType('invalid_type');
     }
 
     public function testPrePersist()
@@ -92,15 +152,25 @@ class IssueTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($issue->getUpdatedAt() > $initialDate);
     }
 
+    public function testCollaboratorsAreAddedOnPreUpdate()
+    {
+        $issue = new Issue();
+        $assignee = new User();
+        $reporter = new User();
+
+        $issue->setAssignee($assignee)
+            ->setReporter($reporter);
+
+        $issue->preUpdate();
+
+        $this->assertTrue($issue->getCollaborators()->contains($assignee));
+        $this->assertTrue($issue->getCollaborators()->contains($reporter));
+    }
+
     public function testGetTaggableId()
     {
         $issue = $this->createEntity(array_merge(['id' => 1], $this->entityTestData));
         $this->assertEquals(1, $issue->getTaggableId());
-    }
-
-    public function testIssueSetters()
-    {
-        $this->assertEntitySetters(new Issue(), $this->entityTestData);
     }
 
     /**

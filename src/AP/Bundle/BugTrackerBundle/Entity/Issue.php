@@ -9,12 +9,15 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\TagBundle\Entity\Taggable;
 use Oro\Bundle\UserBundle\Entity\User;
+use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
+use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
 
 /**
+ * @SuppressWarnings(PHPMD.TooManyFields)
  * Class Issue
  * @package AP\Bundle\BugTrackerBundle
  *
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="AP\Bundle\BugTrackerBundle\Entity\Repository\IssueRepository")
  * @ORM\Table(
  *      name="ap_bug_tracker_issue"
  * )
@@ -26,11 +29,12 @@ use Oro\Bundle\UserBundle\Entity\User;
  *      defaultValues={
  *          "dataaudit"={
  *              "auditable"=true
- *          }
+ *          },
+ *          "workflow"={"active_workflow"="issue_flow"}
  *      }
  * )
  */
-class Issue extends ExtendIssue implements Taggable, CollaboratorAwareInterface
+class Issue extends ExtendIssue implements Taggable
 {
     const TYPE_STORY = 'story';
     const TYPE_BUG = 'bug';
@@ -38,7 +42,7 @@ class Issue extends ExtendIssue implements Taggable, CollaboratorAwareInterface
     const TYPE_TASK = 'task';
 
     /**
-     * @return int[]
+     * @return string[]
      */
     public static function getTypes()
     {
@@ -185,6 +189,22 @@ class Issue extends ExtendIssue implements Taggable, CollaboratorAwareInterface
     protected $tags;
 
     /**
+     * @var WorkflowItem
+     *
+     * @ORM\OneToOne(targetEntity="Oro\Bundle\WorkflowBundle\Entity\WorkflowItem")
+     * @ORM\JoinColumn(name="workflow_item_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $workflowItem;
+
+    /**
+     * @var WorkflowStep
+     *
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\WorkflowBundle\Entity\WorkflowStep")
+     * @ORM\JoinColumn(name="workflow_step_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $workflowStep;
+
+    /**
      * Issue constructor.
      */
     public function __construct()
@@ -196,11 +216,57 @@ class Issue extends ExtendIssue implements Taggable, CollaboratorAwareInterface
     }
 
     /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getSummary();
+    }
+
+    /**
      * @return int
      */
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @param WorkflowItem $workflowItem
+     * @return $this
+     */
+    public function setWorkflowItem(WorkflowItem $workflowItem)
+    {
+        $this->workflowItem = $workflowItem;
+
+        return $this;
+    }
+
+    /**
+     * @return WorkflowItem
+     */
+    public function getWorkflowItem()
+    {
+        return $this->workflowItem;
+    }
+
+    /**
+     * @param WorkflowStep $workflowStep
+     * @return $this
+     */
+    public function setWorkflowStep(WorkflowStep $workflowStep)
+    {
+        $this->workflowStep = $workflowStep;
+
+        return $this;
+    }
+
+    /**
+     * @return WorkflowStep
+     */
+    public function getWorkflowStep()
+    {
+        return $this->workflowStep;
     }
 
     /**
@@ -215,7 +281,7 @@ class Issue extends ExtendIssue implements Taggable, CollaboratorAwareInterface
      * @param Issue $parentIssue
      * @return $this
      */
-    public function setParentIssue($parentIssue)
+    public function setParentIssue(Issue $parentIssue)
     {
         $this->parentIssue = $parentIssue;
 
@@ -352,6 +418,9 @@ class Issue extends ExtendIssue implements Taggable, CollaboratorAwareInterface
      */
     public function setType($type)
     {
+        if (!in_array($type, static::getTypes(), true)) {
+            throw new \InvalidArgumentException();
+        }
         $this->type = $type;
 
         return $this;
@@ -480,9 +549,15 @@ class Issue extends ExtendIssue implements Taggable, CollaboratorAwareInterface
      */
     public function preUpdate()
     {
-        $this->setUpdatedAt(new \DateTime('now', new \DateTimeZone('UTC')))
-            ->addCollaborator($this->getAssignee())
-            ->addCollaborator($this->getReporter());
+        $this->setUpdatedAt(new \DateTime('now', new \DateTimeZone('UTC')));
+
+        if ($this->getAssignee()) {
+            $this->addCollaborator($this->getAssignee());
+        }
+
+        if ($this->getReporter()) {
+            $this->addCollaborator($this->getReporter());
+        }
     }
 
     /**
@@ -493,14 +568,6 @@ class Issue extends ExtendIssue implements Taggable, CollaboratorAwareInterface
     public function getTaggableId()
     {
         return $this->getId();
-    }
-
-    /**
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->getSummary();
     }
 
 

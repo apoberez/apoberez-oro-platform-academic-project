@@ -8,10 +8,14 @@ datagrid:
                     - issue.id
                     - issue.code
                     - issue.summary
-                    - priority.name as priorityName
-                    - priority.order as priorityOrder
+                    - priority.name as priorityName #todo priority and resolution name
                     - resolution.name as resolutionName
+                    - workflowStep.label as workflowStepLabel
                     - issue.type
+                    - reporter.id as reporterId
+                    - CONCAT(reporter.firstName, CONCAT(' ', reporter.lastName)) as reporterName
+                    - assignee.id as assigneeId
+                    - CONCAT(assignee.firstName, CONCAT(' ', assignee.lastName)) as assigneeName
                     - issue.createdAt
                     - issue.updatedAt
                 from:
@@ -20,6 +24,10 @@ datagrid:
                     left:
                         - { join: issue.priority, alias: priority}
                         - { join: issue.resolution, alias: resolution}
+                        - { join: issue.workflowStep, alias: workflowStep }
+                        - { join: issue.reporter, alias: reporter }
+                        - { join: issue.assignee, alias: assignee }
+                        - { join: issue.collaborators, alias: collaborator } #todo
 
         columns:
             code:
@@ -30,8 +38,24 @@ datagrid:
                 label: Type
             priorityName:
                 label: Priority
+            workflowStepLabel:
+                label: Status
             resolutionName:
                 label: Resolution
+            reporterName:
+                type: twig
+                label: Reporter
+                frontend_type: html
+                template: APBugTrackerBundle:Issue:Datagrid/Property/user.html.twig
+                context:
+                    userIdAlias: reporterId
+            assigneeName:
+                type: twig
+                label: Assignee
+                frontend_type: html
+                template: APBugTrackerBundle:Issue:Datagrid/Property/user.html.twig
+                context:
+                    userIdAlias: assigneeId
             createdAt:
                 label: Created
                 frontend_type: date
@@ -41,13 +65,67 @@ datagrid:
 
         sorters:
             columns:
+                code:
+                    data_name: issue.code
+                type:
+                    data_name: issue.type
                 priorityName:
                     data_name: priority.order
+                resolutionName:
+                    data_name: resolution.order
+                reporterName:
+                    data_name: reporterName
+                assigneeName:
+                    data_name: assigneeName
+                workflowStepLabel:
+                    data_name: workflowStep.stepOrder
                 updatedAt:
                     data_name: issue.updatedAt
+                createdAt:
+                    data_name: issue.createdAt
             default:
                 updatedAt: DESC
 
+        filters:
+            columns:
+                code:
+                    type: string
+                    data_name: issue.code
+                type:
+                    type: string
+                    data_name: issue.type
+
+                workflowStepLabel:
+                    type: entity
+                    data_name: issue.workflowStep
+                    options:
+                        field_type: oro_workflow_step_select
+                        field_options:
+                            workflow_entity_class: %ap.bug_tracker.issue.entity.class%
+                priorityName:
+                    type: string
+                    data_name: priorityName
+                resolutionName:
+                    type: string
+                    data_name: resolutionName
+                reporterName:
+                    type: string
+                    data_name: reporterName
+                assigneeName:
+                    type: string
+                    data_name: assigneeName
+                createdAt:
+                    type: datetime
+                    data_name: issue.createdAt
+                updatedAt:
+                    type: datetime
+                    data_name: issue.updatedAt
+                collaborator:
+                    type: oro_multiple_entity
+                    data_name: issue.collaborators
+                    options:
+                        field_options:
+                            class: %oro_user.entity.class%
         properties:
             id: ~
             view_link:
@@ -104,9 +182,13 @@ datagrid:
                     - issue.code
                     - issue.summary
                     - priority.name as priorityName
-                    - priority.order as priorityOrder
                     - resolution.name as resolutionName
+                    - workflowStep.label as workflowStepLabel
                     - issue.type
+                    - reporter.id as reporterId
+                    - CONCAT(reporter.firstName, CONCAT(' ', reporter.lastName)) as reporterName
+                    - assignee.id as assigneeId
+                    - CONCAT(assignee.firstName, CONCAT(' ', assignee.lastName)) as assigneeName
                     - issue.createdAt
                     - issue.updatedAt
                 from:
@@ -115,6 +197,10 @@ datagrid:
                     left:
                         - { join: issue.priority, alias: priority}
                         - { join: issue.resolution, alias: resolution}
+                        - { join: issue.workflowStep, alias: workflowStep }
+                        - { join: issue.reporter, alias: reporter }
+                        - { join: issue.assignee, alias: assignee }
+                        - { join: issue.collaborators, alias: collaborator }
 
         columns:
             code:
@@ -125,8 +211,24 @@ datagrid:
                 label: Type
             priorityName:
                 label: Priority
+            workflowStepLabel:
+                label: Status
             resolutionName:
                 label: Resolution
+            reporterName:
+                type: twig
+                label: Reporter
+                frontend_type: html
+                template: APBugTrackerBundle:Issue:Datagrid/Property/user.html.twig
+                context:
+                    userIdAlias: reporterId
+            assigneeName:
+                type: twig
+                label: Assignee
+                frontend_type: html
+                template: APBugTrackerBundle:Issue:Datagrid/Property/user.html.twig
+                context:
+                    userIdAlias: assigneeId
             createdAt:
                 label: Created
                 frontend_type: date

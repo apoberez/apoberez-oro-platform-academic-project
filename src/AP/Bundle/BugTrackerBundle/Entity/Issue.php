@@ -40,6 +40,7 @@ class Issue extends ExtendIssue implements Taggable
     const TYPE_BUG = 'bug';
     const TYPE_SUBTASK = 'subtask';
     const TYPE_TASK = 'task';
+    const FLOW_NAME = 'issue_flow';
 
     /**
      * @return string[]

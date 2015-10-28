@@ -37,3 +37,7 @@ services:
 
     ap.bug_tracker.subtask_add_permission_checker:
         class: %ap.bug_tracker.subtask_add_permission_checker.class%
+
+    ap.bug_tracker.grid.issue_grid_helper:
+        class: AP\Bundle\BugTrackerBundle\Services\Grid\IssueGridHelper
+        arguments: [ @doctrine ]

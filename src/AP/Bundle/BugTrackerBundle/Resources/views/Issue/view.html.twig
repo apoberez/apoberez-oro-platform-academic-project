@@ -13,7 +13,7 @@
     {% if resource_granted('EDIT', entity) %}
         {{ UI.editButton({
             'path' : path('bug_tracker.issue_update', { id: entity.id }),
-            'entity_label': 'ap.bug_tracker.issue_entity.label'|trans
+            'entity_label': 'ap.bugtracker.issue.entity_label'|trans
         }) }}
     {% endif %}
 
@@ -24,7 +24,7 @@
             'aCss': 'no-hash remove-button',
             'id': 'btn-remove-issue',
             'dataId': entity.id,
-            'entity_label': 'ap.bug_tracker.issue_entity.label'|trans,
+            'entity_label': 'ap.bugtracker.issue.entity_label'|trans,
         }) }}
     {% endif %}
 
@@ -34,7 +34,7 @@
     {% set breadcrumbs = {
     'entity':      entity,
     'indexPath':   path('bug_tracker.issue_index'),
-    'indexLabel': 'ap.bug_tracker.issue_entity.plural_label'|trans,
+    'indexLabel': 'ap.bugtracker.issue.entity_plural_label'|trans,
     'entityTitle': entity.summary
     } %}
     {{ parent() }}
@@ -69,23 +69,26 @@
                         {%- endif -%}
                     {%- endset -%}
 
-                    {{ UI.renderProperty('ap.bug_tracker.issue_entity.summary_label'|trans, entity.summary) }}
-                    {{ UI.renderHtmlProperty('ap.bug_tracker.issue_entity.reporter_label'|trans, reporter) }}
-                    {{ UI.renderHtmlProperty('ap.bug_tracker.issue_entity.assignee_label'|trans, assignee) }}
-                    {{ UI.renderProperty('ap.bug_tracker.issue_entity.description_label'|trans, entity.description) }}
-                    {{ UI.renderProperty('ap.bug_tracker.issue_entity.priority_label'|trans, entity.priority.name|trans) }}
-                    {{ UI.renderProperty('ap.bug_tracker.issue_entity.type_label'|trans, entity.type|trans) }}
+                    {{ UI.renderProperty('ap.bugtracker.issue.summary.label'|trans, entity.summary) }}
+                    {{ UI.renderHtmlProperty('ap.bugtracker.issue.reporter.label'|trans, reporter) }}
+                    {{ UI.renderHtmlProperty('ap.bugtracker.issue.assignee.label'|trans, assignee) }}
+                    {{ UI.renderProperty('ap.bugtracker.issue.description.label'|trans, entity.description) }}
+                    {{ UI.renderProperty('ap.bugtracker.issue.priority.label'|trans, entity.priority.label|trans) }}
+                    {%- if entity.resolution -%}
+                        {{ UI.renderProperty('ap.bugtracker.issue.resolution.label'|trans, entity.resolution.label|trans) }}
+                    {%- endif -%}
+                    {{ UI.renderProperty('ap.bugtracker.issue.type.label'|trans, entity.type|trans) }}
 
-                    {% if resource_granted('oro_tag_view') %}
+                    {%- if resource_granted('oro_tag_view') -%}
                         {{ UI.renderHtmlProperty('oro.tag.entity_plural_label'|trans, tag.renderView(entity)) }}
-                    {% endif %}
+                    {%- endif -%}
 
                 </div>
             </div>
         </div>
     {% endset %}
     {% set dataBlocks = [{
-        'title': 'ap.bug_tracker.issue_entity.plural_label'|trans,
+        'title': 'ap.bugtracker.issue.entity_plural_label'|trans,
         'class': 'active',
         'subblocks': [
             { 'data' : [data] }

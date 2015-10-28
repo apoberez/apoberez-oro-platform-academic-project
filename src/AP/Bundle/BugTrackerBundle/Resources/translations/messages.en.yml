@@ -1,7 +1,42 @@
 ap:
     bugtracker:
+        priority:
+            name:
+                label: Name
+        resolution:
+            name:
+                label: Name
         issue:
-            entity_label: Issue
+            entity_label:           Issue
+            entity_plural_label:    Issues
+            import_title:           Import Issue
+
+            id:
+                label:      Id
+            code:
+                label:      Code
+            summary:
+                label:      Summary
+            reporter:
+                label:      Reporter
+            assignee:
+                label:      Assignee
+            description:
+                label:      Description
+            priority:
+                label:      Priority
+            resolution:
+                label:      Resolution
+            collaborators:
+                label:      Collaborators
+            type:
+                label:      Type
+            created_at:
+                label:      Created at
+            updated_at:
+                label:      Updated at
+            status:
+                label:      Status
     bug_tracker:
         dashboard:
             active_issues:
@@ -11,14 +46,6 @@ ap:
                 title: Issues by status
                 description: Char of issues by workflow status.
 
-        priority:
-            high: High
-            medium: Medium
-            low: Low
-        resolution:
-            fixed: Fixed
-            duplicate: Duplicat
-            will_not_fix: "Won't fix"
         type:
             story: Story
             bug: Bug
@@ -36,17 +63,3 @@ ap:
         controller:
             issue:
                 saved_message: New issue was successfully created.
-
-        issue_entity:
-            label: Issue
-            plural_label: Issues
-
-            #properties:
-            summary_label:          Summary
-            reporter_label:         Reporter
-            assignee_label:         Assignee
-            description_label:      Description
-            priority_label:         Priority
-            type_label:             Type
-            created_at_label:       Created at
-            updated_at_label:       Updated at

@@ -27,6 +27,7 @@ class LoadDashboardData extends AbstractDashboardFixture implements DependentFix
 
         if ($mainDashboard) {
             $mainDashboard->addWidget($this->createWidgetModel('active_issues', [0, 80]));
+            $mainDashboard->addWidget($this->createWidgetModel('issues_by_status_chart', [0, 100]));
 
             $manager->flush();
         }

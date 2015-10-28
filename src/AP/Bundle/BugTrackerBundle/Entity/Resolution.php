@@ -4,10 +4,13 @@
 namespace AP\Bundle\BugTrackerBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 
 /**
  * Class Resolution
  * @package AP\Bundle\BugTrackerBundle\Entity
+ * @Config()
  *
  * @ORM\Entity
  * @ORM\Table(name="ap_bug_tracker_resolution")
@@ -27,6 +30,15 @@ class Resolution
      * @var string
      *
      * @ORM\Column(name="name", type="string", unique=true)
+     * @ConfigField(
+     *  defaultValues={
+     *      "dataaudit"={"auditable"=true},
+     *      "importexport"={
+     *          "identity"=true,
+     *          "order"=10
+     *      }
+     *  }
+     * )
      */
     protected $name;
 

@@ -8,8 +8,8 @@ datagrid:
                     - issue.id
                     - issue.code
                     - issue.summary
-                    - priority.name as priorityName #todo priority and resolution name
-                    - resolution.name as resolutionName
+                    - priority.label as priorityName
+                    - resolution.label as resolutionName
                     - workflowStep.label as workflowStepLabel
                     - issue.type
                     - reporter.id as reporterId
@@ -27,40 +27,40 @@ datagrid:
                         - { join: issue.workflowStep, alias: workflowStep }
                         - { join: issue.reporter, alias: reporter }
                         - { join: issue.assignee, alias: assignee }
-                        - { join: issue.collaborators, alias: collaborator } #todo
+#                        - { join: issue.collaborators, alias: collaborator } #todo
 
         columns:
             code:
-                label: Code
+                label: ap.bugtracker.issue.code.label
             summary:
-                label: Summary
+                label: ap.bugtracker.issue.summary.label
             type:
-                label: Type
+                label: ap.bugtracker.issue.type.label
             priorityName:
-                label: Priority
+                label: ap.bugtracker.issue.priority.label
             workflowStepLabel:
-                label: Status
+                label: ap.bugtracker.issue.status.label
             resolutionName:
-                label: Resolution
+                label: ap.bugtracker.issue.resolution.label
             reporterName:
                 type: twig
-                label: Reporter
+                label: ap.bugtracker.issue.reporter.label
                 frontend_type: html
                 template: APBugTrackerBundle:Issue:Datagrid/Property/user.html.twig
                 context:
                     userIdAlias: reporterId
             assigneeName:
                 type: twig
-                label: Assignee
+                label: ap.bugtracker.issue.assignee.label
                 frontend_type: html
                 template: APBugTrackerBundle:Issue:Datagrid/Property/user.html.twig
                 context:
                     userIdAlias: assigneeId
             createdAt:
-                label: Created
+                label: ap.bugtracker.issue.created_at.label
                 frontend_type: date
             updatedAt:
-                label: Updated
+                label: ap.bugtracker.issue.updated_at.label
                 frontend_type: date
 
         sorters:
@@ -120,12 +120,12 @@ datagrid:
                 updatedAt:
                     type: datetime
                     data_name: issue.updatedAt
-                collaborator:
-                    type: oro_multiple_entity
-                    data_name: issue.collaborators
-                    options:
-                        field_options:
-                            class: %oro_user.entity.class%
+#                collaborator:
+#                    type: oro_multiple_entity
+#                    data_name: issue.collaborators
+#                    options:
+#                        field_options:
+#                            class: %oro_user.entity.class%
         properties:
             id: ~
             view_link:

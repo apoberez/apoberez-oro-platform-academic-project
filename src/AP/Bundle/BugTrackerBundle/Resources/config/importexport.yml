@@ -1,0 +1,29 @@
+services:
+    ap.bug_tracker.importexport.data_converter.issue:
+        parent: oro_importexport.data_converter.configurable
+
+    ap.bug_tracker.importexport.strategy.issue.add_or_replace:
+        parent: oro_importexport.strategy.configurable_add_or_replace
+
+    ap.bug_tracker.importexport.processor.export.issue:
+        parent: oro_importexport.processor.export_abstract
+        calls:
+            - [setDataConverter, [@ap.bug_tracker.importexport.data_converter.issue]]
+        tags:
+            - { name: oro_importexport.processor, type: export, entity: %ap.bug_tracker.issue.entity.class%, alias: ap_bugtracker_issue }
+
+    ap.bug_tracker.importexport.processor.export_template.issue:
+        parent: oro_importexport.processor.export_abstract
+        calls:
+            - [setDataConverter, [@ap.bug_tracker.importexport.data_converter.issue]]
+        tags:
+            - { name: oro_importexport.processor, type: export_template, entity: %ap.bug_tracker.issue.entity.class%, alias: ap_bugtracker_issue }
+
+    ap.bug_tracker.importexport.processor.import.issue:
+        parent: oro_importexport.processor.import_abstract
+        calls:
+             - [setDataConverter, [@ap.bug_tracker.importexport.data_converter.issue]]
+             - [setStrategy, [@ap.bug_tracker.importexport.strategy.issue.add_or_replace]]
+        tags:
+            - { name: oro_importexport.processor, type: import, entity: %ap.bug_tracker.issue.entity.class%, alias: ap_bugtracker_issue.add_or_replace }
+            - { name: oro_importexport.processor, type: import_validation, entity: %ap.bug_tracker.issue.entity.class%, alias: ap_bugtracker_issue.add_or_replace }

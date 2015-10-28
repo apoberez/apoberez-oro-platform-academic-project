@@ -1,0 +1,6 @@
+AP\Bundle\BugTrackerBundle\Entity\Issue:
+    properties:
+        summary:
+            - NotBlank: ~
+            - Length:
+                max: 255

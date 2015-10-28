@@ -1,14 +1,24 @@
 {% extends 'OroUIBundle:actions:index.html.twig' %}
 {% import 'OroUIBundle::macros.html.twig' as UI %}
 {% set gridName = 'issues-grid' %}
-{% set pageTitle = 'ap.bug_tracker.issue_entity.plural_label'|trans %}
+{% set pageTitle = 'ap.bugtracker.issue.entity_plural_label'|trans %}
 
 {% block navButtons %}
+
+    {% include 'OroImportExportBundle:ImportExport:buttons.html.twig' with {
+        entity_class: entity_class,
+        exportProcessor: 'ap_bugtracker_issue',
+        exportTemplateProcessor: 'ap_bugtracker_issue',
+        importProcessor: 'ap_bugtracker_issue.add_or_replace',
+        importTitle: 'ap.bugtracker.issue.import_title'|trans,
+        dataGridName: gridName
+    } %}
+
     {% if resource_granted('bug_tracker.issue_create') %}
         <div class="btn-group">
             {{ UI.addButton({
                 'path': path('bug_tracker.issue_create'),
-                'entity_label': 'ap.bug_tracker.issue_entity.label'|trans
+                'entity_label': 'ap.bugtracker.issue.entity_label'|trans
             }) }}
         </div>
     {% endif %}

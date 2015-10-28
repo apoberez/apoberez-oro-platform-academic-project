@@ -70,6 +70,15 @@ class Issue extends ExtendIssue implements Taggable
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @ConfigField(
+     *  defaultValues={
+     *      "dataaudit"={"auditable"=true},
+     *      "importexport"={
+     *          "order"=10,
+     *          "short"=true
+     *      }
+     *  }
+     * )
      */
     private $id;
 
@@ -77,6 +86,15 @@ class Issue extends ExtendIssue implements Taggable
      * @var string
      *
      * @ORM\Column(type="text")
+     * @ConfigField(
+     *  defaultValues={
+     *      "dataaudit"={"auditable"=true},
+     *      "importexport"={
+     *          "order"=30,
+     *          "short"=true
+     *      }
+     *  }
+     * )
      */
     protected $summary;
 
@@ -84,6 +102,15 @@ class Issue extends ExtendIssue implements Taggable
      * @var string
      *
      * @ORM\Column(name="description", type="text", nullable=true)
+     * @ConfigField(
+     *  defaultValues={
+     *      "dataaudit"={"auditable"=true},
+     *      "importexport"={
+     *          "order"=90,
+     *          "short"=true
+     *      }
+     *  }
+     * )
      */
     protected $description;
 
@@ -91,6 +118,15 @@ class Issue extends ExtendIssue implements Taggable
      * @var string
      *
      * @ORM\Column(type="string", unique=true, nullable=true)
+     * @ConfigField(
+     *  defaultValues={
+     *      "dataaudit"={"auditable"=true},
+     *      "importexport"={
+     *          "order"=20,
+     *          "short"=true
+     *      }
+     *  }
+     * )
      */
     protected $code;
 
@@ -98,6 +134,15 @@ class Issue extends ExtendIssue implements Taggable
      * @var string
      *
      * @ORM\Column(name="issue_type", type="string")
+     * @ConfigField(
+     *  defaultValues={
+     *      "dataaudit"={"auditable"=true},
+     *      "importexport"={
+     *          "order"=40,
+     *          "short"=true
+     *      }
+     *  }
+     * )
      */
     protected $type;
 
@@ -106,6 +151,14 @@ class Issue extends ExtendIssue implements Taggable
      *
      * @ORM\ManyToOne(targetEntity="Priority")
      * @ORM\JoinColumn(name="priority_id", referencedColumnName="id")
+     * @ConfigField(
+     *  defaultValues={
+     *      "dataaudit"={"auditable"=true},
+     *      "importexport"={
+     *          "order"=50
+     *      }
+     *  }
+     * )
      */
     protected $priority;
 
@@ -114,6 +167,14 @@ class Issue extends ExtendIssue implements Taggable
      *
      * @ORM\ManyToOne(targetEntity="Resolution")
      * @ORM\JoinColumn(name="resolution_id", referencedColumnName="id")
+     * @ConfigField(
+     *  defaultValues={
+     *      "dataaudit"={"auditable"=true},
+     *      "importexport"={
+     *          "order"=60
+     *      }
+     *  }
+     * )
      */
     protected $resolution;
 
@@ -122,6 +183,14 @@ class Issue extends ExtendIssue implements Taggable
      *
      * @ORM\ManyToOne(targetEntity="Issue", inversedBy="subtasks")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
+     * @ConfigField(
+     *  defaultValues={
+     *      "dataaudit"={"auditable"=true},
+     *      "importexport"={
+     *          "excluded"=true
+     *      }
+     *  }
+     * )
      */
     protected $parentIssue;
 
@@ -129,6 +198,14 @@ class Issue extends ExtendIssue implements Taggable
      * @var ArrayCollection;
      *
      * @ORM\OneToMany(targetEntity="Issue", mappedBy="parentIssue")
+     * @ConfigField(
+     *  defaultValues={
+     *      "dataaudit"={"auditable"=true},
+     *      "importexport"={
+     *          "excluded"=true
+     *      }
+     *  }
+     * )
      */
     protected $subtasks;
 
@@ -137,6 +214,15 @@ class Issue extends ExtendIssue implements Taggable
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="assignee", referencedColumnName="id", onDelete="SET NULL")
+     * @ConfigField(
+     *  defaultValues={
+     *      "dataaudit"={"auditable"=true},
+     *      "importexport"={
+     *          "order"=70,
+     *          "short"=true
+     *      }
+     *  }
+     * )
      */
     protected $assignee;
 
@@ -145,6 +231,15 @@ class Issue extends ExtendIssue implements Taggable
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="reporter_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ConfigField(
+     *  defaultValues={
+     *      "dataaudit"={"auditable"=true},
+     *      "importexport"={
+     *          "order"=80,
+     *          "short"=true
+     *      }
+     *  }
+     * )
      */
     protected $reporter;
 
@@ -157,7 +252,14 @@ class Issue extends ExtendIssue implements Taggable
      *     joinColumns={@ORM\JoinColumn(name="issue_id", referencedColumnName="id")},
      *     inverseJoinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")}
      * )
-     *
+     * @ConfigField(
+     *  defaultValues={
+     *      "dataaudit"={"auditable"=true},
+     *      "importexport"={
+     *          "excluded"=true
+     *      }
+     *  }
+     * )
      */
     protected $collaborators;
 
@@ -165,6 +267,14 @@ class Issue extends ExtendIssue implements Taggable
      * @var \DateTime
      *
      * @ORM\Column(type="created_at", type="datetime")
+     * @ConfigField(
+     *  defaultValues={
+     *      "dataaudit"={"auditable"=true},
+     *      "importexport"={
+     *          "excluded"=true
+     *      }
+     *  }
+     * )
      */
     protected $createdAt;
 
@@ -172,6 +282,14 @@ class Issue extends ExtendIssue implements Taggable
      * @var \DateTime
      *
      * @ORM\Column(name="updated_at", type="datetime")
+     * @ConfigField(
+     *  defaultValues={
+     *      "dataaudit"={"auditable"=true},
+     *      "importexport"={
+     *          "excluded"=true
+     *      }
+     *  }
+     * )
      */
     protected $updatedAt;
 
@@ -182,6 +300,9 @@ class Issue extends ExtendIssue implements Taggable
      *      defaultValues={
      *          "merge"={
      *              "display"=true
+     *          },
+     *         "importexport"={
+     *              "excluded"=true
      *          }
      *      }
      * )
@@ -193,6 +314,14 @@ class Issue extends ExtendIssue implements Taggable
      *
      * @ORM\OneToOne(targetEntity="Oro\Bundle\WorkflowBundle\Entity\WorkflowItem")
      * @ORM\JoinColumn(name="workflow_item_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ConfigField(
+     *  defaultValues={
+     *      "dataaudit"={"auditable"=true},
+     *      "importexport"={
+     *          "excluded"=true
+     *      }
+     *  }
+     * )
      */
     protected $workflowItem;
 
@@ -201,6 +330,14 @@ class Issue extends ExtendIssue implements Taggable
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\WorkflowBundle\Entity\WorkflowStep")
      * @ORM\JoinColumn(name="workflow_step_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ConfigField(
+     *  defaultValues={
+     *      "dataaudit"={"auditable"=true},
+     *      "importexport"={
+     *          "excluded"=true
+     *      }
+     *  }
+     * )
      */
     protected $workflowStep;
 

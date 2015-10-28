@@ -1,6 +1,6 @@
 AP\Bundle\BugTrackerBundle\Entity\Issue:
     alias: ap_bug_tracker_issue
-    label: ap.bug_tracker.issue_entity.label
+    label: ap.bugtracker.issue.entity_label
     route:
         name: bug_tracker.issue_view
         parameters:
@@ -11,3 +11,87 @@ AP\Bundle\BugTrackerBundle\Entity\Issue:
             name:                   summary
             target_type:            text
             target_fields:          [summary]
+        -
+            name:                   code
+            target_type:            text
+            target_fields:          [code]
+        -
+            name:                   type
+            target_type:            text
+            target_fields:          [type]
+        -
+            name:                   reporter
+            relation_type:          many-to-one
+            relation_fields:
+                -
+                    name: namePrefix
+                    target_type: text
+                    target_fields: [namePrefix]
+                -
+                    name: firstName
+                    target_type: text
+                    target_fields: [firstName]
+                -
+                    name: middleName
+                    target_type: text
+                    target_fields: [middleName]
+                -
+                    name: lastName
+                    target_type: text
+                    target_fields: [lastName]
+                -
+                    name: nameSuffix
+                    target_type: text
+                    target_fields: [nameSuffix]
+        -
+            name:                   assignee
+            relation_type:          many-to-one
+            relation_fields:
+                -
+                    name: namePrefix
+                    target_type: text
+                    target_fields: [namePrefix]
+                -
+                    name: firstName
+                    target_type: text
+                    target_fields: [firstName]
+                -
+                    name: middleName
+                    target_type: text
+                    target_fields: [middleName]
+                -
+                    name: lastName
+                    target_type: text
+                    target_fields: [lastName]
+                -
+                    name: nameSuffix
+                    target_type: text
+                    target_fields: [nameSuffix]
+        -
+            name:                   priority
+            relation_type:          many-to-one
+            relation_fields:
+                -
+                    name:               label
+                    target_type:        text
+                    target_fields:      [label]
+        -
+            name:                   resolution
+            relation_type:          many-to-one
+            relation_fields:
+                -
+                    name:               label
+                    target_type:        text
+                    target_fields:      [label]
+        -
+            name:                   workflowStep
+            relation_type:          many-to-one
+            relation_fields:
+                -
+                    name:                   name
+                    target_type:            text
+                    target_fields:          [statusName]
+                -
+                    name:                   label
+                    target_type:            text
+                    target_fields:          [statusLabel]

@@ -35,6 +35,11 @@ class IssueType extends AbstractType
                 'required' => true,
                 'label' => 'ap.bug_tracker.issue_entity.priority_label'
             ])
+            ->add('resolution', 'entity', [
+                'class' => 'AP\Bundle\BugTrackerBundle\Entity\Resolution',
+                'required' => true,
+                'label' => 'ap.bug_tracker.issue_entity.resolution_label'
+            ])
             ->add('tags', 'oro_tag_select', [
                 'label' => 'oro.tag.entity_plural_label'
             ]);

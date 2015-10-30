@@ -14,6 +14,12 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
  */
 class IssueControllerTest extends WebTestCase
 {
+    protected function setUp()
+    {
+        $this->initClient([], $this->generateWsseAuthHeader());
+        $this->loadFixtures(['AP\Bundle\BugTrackerBundle\Tests\Functional\DataFixtures\LoadIssueData']);
+    }
+
     public function testGetListAction()
     {
         $this->client->request('GET', '/api/rest/latest/bug-tracker/issue/list');
@@ -125,11 +131,5 @@ class IssueControllerTest extends WebTestCase
     protected function getDecodedResponse()
     {
         return json_decode($this->client->getResponse()->getContent());
-    }
-
-    protected function setUp()
-    {
-        $this->initClient([], $this->generateWsseAuthHeader());
-        $this->loadFixtures(['AP\Bundle\BugTrackerBundle\Tests\Functional\DataFixtures\LoadIssueData']);
     }
 }

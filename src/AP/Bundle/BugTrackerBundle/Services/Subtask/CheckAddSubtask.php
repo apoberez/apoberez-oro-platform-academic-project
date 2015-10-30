@@ -10,7 +10,7 @@ class CheckAddSubtask implements CheckAddSubtaskInterface
     /**
      * @var array
      */
-    private static $allowedTypes = [
+    public static $allowedTypes = [
         Issue::TYPE_STORY
     ];
 

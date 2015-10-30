@@ -2,19 +2,14 @@
 
 namespace AP\Bundle\BugTrackerBundle\Tests\Unit\Form\Type;
 
-use AP\Bundle\BugTrackerBundle\Entity\Issue;
+use AP\Bundle\BugTrackerBundle\Entity\Repository\WorkflowStepRepository;
+use AP\Bundle\BugTrackerBundle\Form\DataProvider\IssueFormDataProvider;
 use AP\Bundle\BugTrackerBundle\Form\Type\IssueType;
-use AP\Component\ObjectAccessUtils\ObjectPrivatePropertiesSetter;
-use AP\Component\TestUtils\Form\FormTypeTestCase;
-use Oro\Bundle\EntityBundle\Form\Type\EntitySelectType;
-use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Form\PreloadedExtension;
+use Symfony\Component\Form\FormBuilder;
+use Symfony\Component\Form\FormEvent;
 
-class IssueTypeTest extends FormTypeTestCase
+class IssueTypeTest extends \PHPUnit_Framework_TestCase
 {
-    use ObjectPrivatePropertiesSetter;
-
     /**
      * @var IssueType()
      */
@@ -23,52 +18,26 @@ class IssueTypeTest extends FormTypeTestCase
     public function setUp()
     {
         parent::setUp();
-
-        $this->type = new IssueType();
-    }
-
-    public function testSubmitValidData()
-    {
-//        $formData = [
-//            'summary' => 'test',
-//            'description' => 'test'
-//        ];
-//
-//        $form = $this->factory->create($this->type);
-//
-//        $object = $this->setObjectProperties(new Issue(), $formData);
-//
-//        // submit the data to the form directly
-//        $form->submit($formData);
-//
-//        $this->assertTrue($form->isSynchronized());
-//        $this->assertEquals($object, $form->getData());
-//
-//        $view = $form->createView();
-//        $children = $view->children;
-//
-//        foreach ($formData as $key => $value) {
-//            $this->assertArrayHasKey($key, $children);
-//        }
-    }
-
-    /**
-     * @return array
-     */
-    protected function getExtensions()
-    {
-        /** @var EntityType $entityType */
-        $entityType = $this->getEntityTypeMock();
-
-        /** @var ConfigManager $configManager */
-        $configManager = $this->getMockBuilder('Oro\Bundle\EntityConfigBundle\Config\ConfigManager')
+        /** @var WorkflowStepRepository $mockWorkflowRepository */
+        $mockWorkflowRepository = $this
+            ->getMockBuilder('AP\Bundle\BugTrackerBundle\Entity\Repository\WorkflowStepRepository')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $entitySelectType = new EntitySelectType($configManager);
+        $this->type = new IssueType(new IssueFormDataProvider($mockWorkflowRepository));
+    }
 
-        return [
-            new PreloadedExtension([$entityType->getName() => $entityType], []),
-        ];
+    public function testBuildForm()
+    {
+        $builder = $this->getMockBuilder('Symfony\Component\Form\FormBuilder')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $builder->expects($this->any())
+            ->method('add')
+            ->will($this->returnSelf());
+
+        /** @var FormBuilder $builder */
+        $this->type->buildForm($builder, []);
     }
 }

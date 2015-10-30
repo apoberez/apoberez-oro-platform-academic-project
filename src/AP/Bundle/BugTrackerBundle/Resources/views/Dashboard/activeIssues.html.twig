@@ -3,16 +3,13 @@
 
 {% block content %}
     {{ dataGrid.renderGrid('dashboard-active-issues-grid') }}
-    <script type="text/javascript">
-        require(['orocrm/call/info-opener']);
-    </script>
 {% endblock %}
 
 {% block actions %}
     {% set actions = [{
-    'url': path('bug_tracker.issue_index'),
-    'type': 'link',
-    'label': 'orocrm.dashboard.recent_calls.view_all'|trans
+        'url': path('bug_tracker.issue_index')~'?grid[issues-grid]=i%3D1%26p%3D25%26s%255BupdatedAt%255D%3D1%26f%255BworkflowStepLabel%255D%255Bvalue%255D%255B%255D%3D2%26f%255BworkflowStepLabel%255D%255Bvalue%255D%255B%255D%3D1%26f%255Bcollaborator%255D%255Bvalue%255D%3D1%26v%3D__all__',
+        'type': 'link',
+        'label': 'ap.bugtracker.dashboard.active_issues.view_all'|trans
     }] %}
 
     {{ parent() }}

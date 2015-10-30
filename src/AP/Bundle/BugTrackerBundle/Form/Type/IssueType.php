@@ -3,6 +3,7 @@
 namespace AP\Bundle\BugTrackerBundle\Form\Type;
 
 use AP\Bundle\BugTrackerBundle\Entity\Issue;
+use AP\Bundle\BugTrackerBundle\Form\DataProvider\IssueFormDataProviderInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
@@ -17,6 +18,21 @@ class IssueType extends AbstractType
     const DATA_CLASS = 'AP\Bundle\BugTrackerBundle\Entity\Issue';
 
     /**
+     * @var IssueFormDataProviderInterface
+     */
+    protected $formDataProvider;
+
+    /**
+     * IssueType constructor.
+     * @param IssueFormDataProviderInterface $formDataProvider
+     */
+    public function __construct(IssueFormDataProviderInterface $formDataProvider)
+    {
+        $this->formDataProvider = $formDataProvider;
+    }
+
+
+    /**
      * @param FormBuilderInterface $builder
      * @param array $options
      */
@@ -24,38 +40,34 @@ class IssueType extends AbstractType
     {
         $builder
             ->add('summary', 'text', [
-                'label' => 'ap.bug_tracker.issue_entity.summary_label'
+                'label' => 'ap.bugtracker.issue.summary.label'
             ])
             ->add('description', 'textarea', [
                 'required' => false,
-                'label' => 'ap.bug_tracker.issue_entity.description_label'
+                'label' => 'ap.bugtracker.issue.description.label'
             ])
             ->add('priority', 'entity', [
                 'class' => 'AP\Bundle\BugTrackerBundle\Entity\Priority',
                 'required' => true,
-                'label' => 'ap.bug_tracker.issue_entity.priority_label'
+                'label' => 'ap.bugtracker.issue.priority.label'
             ])
             ->add('resolution', 'entity', [
                 'class' => 'AP\Bundle\BugTrackerBundle\Entity\Resolution',
-                'required' => true,
-                'label' => 'ap.bug_tracker.issue_entity.resolution_label'
+                'required' => false,
+                'label' => 'ap.bugtracker.issue.resolution.label'
             ])
             ->add('tags', 'oro_tag_select', [
                 'label' => 'oro.tag.entity_plural_label'
-            ]);
-
-        $builder->add('assignee', 'oro_user_organization_acl_select', [
-                'required' => false,
-                'label' => 'orocrm.contact.assigned_to.label'
-            ])->add('reporter', 'oro_user_organization_acl_select', [
+            ])
+            ->add('assignee', 'oro_user_organization_acl_select', [
                 'required' => false,
                 'label' => 'orocrm.contact.assigned_to.label'
             ]);
 
-        $types = array_combine(Issue::getTypes(), Issue::getTypes());
-        $this->addTypeField($builder, $types);
+            $types = $this->formDataProvider->getTypeChoices();
+            $this->addTypeField($builder, $types);
 
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'onPreSetData']);
+            $builder->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'onPreSetData']);
     }
 
     /**
@@ -77,7 +89,7 @@ class IssueType extends AbstractType
         /** @var Issue $issue */
         $issue = $event->getData();
         if ($issue && $issue->getParentIssue()) {
-            $data = array_combine(Issue::getSubtaskTypes(), Issue::getSubtaskTypes());
+            $data = $this->formDataProvider->getSubtaskTypeChoices();
             $this->addTypeField($event->getForm(), $data);
         }
     }
@@ -99,7 +111,7 @@ class IssueType extends AbstractType
     protected function addTypeField($builder, array $data)
     {
         $builder->add('type', 'choice', [
-            'label' => 'ap.bug_tracker.issue_entity.type_label',
+            'label' => 'ap.bugtracker.issue.type.label',
             'choices' => $data
         ]);
     }

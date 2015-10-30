@@ -19,13 +19,7 @@ class IssueControllerTest extends WebTestCase
     protected function setUp()
     {
         $this->initClient([], array_merge($this->generateBasicAuthHeader(), ['HTTP_X-CSRF-Header' => 1]));
-
         $this->loadFixtures(['AP\Bundle\BugTrackerBundle\Tests\Functional\DataFixtures\LoadIssueData']);
-    }
-
-    public function testMainMenu()
-    {
-        //todo
     }
 
     public function testAllTrackerPagesAvailable()
@@ -81,6 +75,11 @@ class IssueControllerTest extends WebTestCase
     }
 
     public function testViewIssue()
+    {
+
+    }
+
+    public function testUpdateIssue()
     {
 
     }

@@ -117,13 +117,6 @@ class IssueTest extends \PHPUnit_Framework_TestCase
         ]);
     }
 
-    public function testGetSubtaskTypes()
-    {
-        $this->assertEquals(Issue::getSubtaskTypes(), [
-            'subtask',
-        ]);
-    }
-
     /**
      * @expectedException \InvalidArgumentException
      */

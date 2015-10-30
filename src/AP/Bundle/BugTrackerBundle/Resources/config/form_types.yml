@@ -5,14 +5,14 @@ parameters:
 services:
     ap.bug_tracker.form.type.issue:
         class: %ap.bug_tracker.form.type.issue_type.class%
+        arguments: [@ap.bug_tracker.issue_form_data_provider]
         tags:
             - { name: form.type, alias: bug_tracker_issue }
-
     ap.bug_tracker.form.type.issue_api:
         class: %ap.bug_tracker.form.type.issue_type_api.class%
+        arguments: [@ap.bug_tracker.issue_form_data_provider]
         tags:
             - { name: form.type, alias: issue }
-
     ap.bug_tracker.form.issue_api:
         class: Symfony\Component\Form\Form
         factory_method: createNamed

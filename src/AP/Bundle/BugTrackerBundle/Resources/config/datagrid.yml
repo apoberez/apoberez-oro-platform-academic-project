@@ -1,6 +1,5 @@
 datagrid:
     issues-grid:
-#    "f[workflowStepLabel][value][]=2&f[workflowStepLabel][value][]=1&f[workflowStepLabel][value][]=3&f[collaborator][value]=2"
         source:
             acl_resource: bug_tracker.issue_view
             type: orm
@@ -38,10 +37,7 @@ datagrid:
             bind_parameters:
                 -
                     name: user
-                    default: 1
-#                        - { join: issue.collaborators, alias: collaborator }
-#                group_by: issue.id
-
+                    default: @oro_security.security_facade->getLoggedUserId
         columns:
             code:
                 label: ap.bugtracker.issue.code.label
@@ -105,15 +101,19 @@ datagrid:
                     type: string
                     data_name: issue.code
                 type:
-                    type: string
+                    type: choice
                     data_name: issue.type
+                    options:
+                        field_options:
+                            multiple: true
+                            choices: @ap.bug_tracker.issue_form_data_provider->getTypeChoices
                 workflowStepLabel:
                     type: choice
                     data_name: issue.workflowStep
                     options:
                         field_options:
                             multiple: true
-                            choices: @ap.bug_tracker.grid.issue_grid_helper->getWorkflowStatusChoices
+                            choices: @ap.bug_tracker.issue_form_data_provider->getWorkflowStatusChoices
                 priorityName:
                     type: string
                     data_name: priorityName
@@ -194,6 +194,8 @@ datagrid:
             default:
                 collaborator:
                     value: 1
+                workflowStepLabel:
+                    value: @ap.bug_tracker.issue_form_data_provider->getWorkflowActiveStatuses
 
         options:
             toolbarOptions:

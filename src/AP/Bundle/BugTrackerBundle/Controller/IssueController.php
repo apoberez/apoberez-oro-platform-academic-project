@@ -9,6 +9,7 @@ use Oro\Bundle\SecurityBundle\Annotation\Acl;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -47,14 +48,22 @@ class IssueController extends Controller
      *     class="APBugTrackerBundle:Issue",
      *     permission="CREATE"
      * )
+     * @param Request $request
      * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function createAction()
+    public function createAction(Request $request)
     {
         $issue = new Issue();
         $issue->setReporter($this->getUser());
-        $issue->setAssignee($this->getUser());
-        return $this->update($issue);
+        $assigneeId = $request->query->get('assigneeId');
+        if ($assigneeId && $assignee = $this->getDoctrine()->getRepository('OroUserBundle:User')->find($assigneeId)) {
+            $issue->setAssignee($assignee);
+        }
+
+        $result = $this->update($issue);
+        $result['formAction'] = $this->generateUrl('bug_tracker.issue_create');
+
+        return $result;
     }
 
     /**
@@ -116,7 +125,7 @@ class IssueController extends Controller
         $handler = $this->get('ap.bug_tracker.issue_form_handler');
         $form = $handler->getForm();
 
-        return  $this->get('oro_form.model.update_handler')->handleUpdate(
+        $result = $this->get('oro_form.model.update_handler')->handleUpdate(
             $issue,
             $form,
             function (Issue $issue) {
@@ -134,5 +143,7 @@ class IssueController extends Controller
             $this->get('translator')->trans('ap.bug_tracker.controller.issue.saved_message'),
             $handler
         );
+
+        return $result;
     }
 }

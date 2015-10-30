@@ -4,3 +4,8 @@ AP\Bundle\BugTrackerBundle\Entity\Issue:
             - NotBlank: ~
             - Length:
                 max: 255
+        type:
+            - NotBlank: ~
+            #todo
+        priority:
+            - NotBlank: ~

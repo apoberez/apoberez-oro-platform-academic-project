@@ -56,16 +56,6 @@ class Issue extends ExtendIssue implements Taggable
     }
 
     /**
-     * @return int[]
-     */
-    public static function getSubtaskTypes()
-    {
-        return [
-            static::TYPE_SUBTASK,
-        ];
-    }
-
-    /**
      * @var integer
      *
      * @ORM\Column(type="integer")
@@ -151,7 +141,7 @@ class Issue extends ExtendIssue implements Taggable
      * @var Priority
      *
      * @ORM\ManyToOne(targetEntity="Priority")
-     * @ORM\JoinColumn(name="priority_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="priority_id", referencedColumnName="id", nullable=false)
      * @ConfigField(
      *  defaultValues={
      *      "dataaudit"={"auditable"=true},

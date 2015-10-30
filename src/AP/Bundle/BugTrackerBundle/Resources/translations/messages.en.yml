@@ -1,21 +1,22 @@
 ap:
     bugtracker:
         datagrid:
-            yes: Yes
-            no: No
-            my_issues: My Issues
+            yes:    Yes
+            no:     No
+            my_issues:      My Issues
         priority:
-            entity_label: Priority
+            entity_label:   Priority
             name:
-                label: Name
+                label:      Name
         resolution:
-            entity_label: Resolution
+            entity_label:   Resolution
             name:
-                label: Name
+                label:      Name
         issue:
-            entity_label:           Issue
-            entity_plural_label:    Issues
-            import_title:           Import Issue
+            entity_label:         Issue
+            entity_plural_label:  Issues
+            import_title:         Import Issue
+            entity_create:        Create Issue
 
             id:
                 label:      Id
@@ -43,20 +44,26 @@ ap:
                 label:      Updated at
             status:
                 label:      Status
-    bug_tracker:
+            parent:
+                label:      Parent Issue
+            subtasks:
+                label:      Subtasks
+
         dashboard:
             active_issues:
-                title: Active Issues
-                description: List of last 10 active issues, where user is collaborator.
+                title:          Active Issues
+                description:    List of last 10 active issues, where user is collaborator.
+                view_all:       View all
             issues_by_status_chart:
-                title: Issues by status
-                description: Char of issues by workflow status.
+                title:          Issues by status
+                description:    Char of issues by workflow status.
+    bug_tracker:
 
         type:
-            story: Story
-            bug: Bug
-            task: Task
-            subtask: Subtask
+            story:      Story
+            bug:        Bug
+            task:       Task
+            subtask:    Subtask
 
         menu:
             bug_tracker_tab:    Bug tracker

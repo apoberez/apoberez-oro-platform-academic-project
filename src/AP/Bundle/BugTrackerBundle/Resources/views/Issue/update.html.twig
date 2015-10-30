@@ -15,7 +15,7 @@
             'aCss': 'no-hash remove-button',
             'id': 'btn-remove-tag',
             'dataId': form.vars.value.id,
-            'entity_label': 'ap.bug_tracker.issue_entity.label'|trans
+            'entity_label': 'ap.bugtracker.issue.entity_label'|trans
         }) }}
         {{ UI.buttonSeparator() }}
     {% endif %}
@@ -32,12 +32,12 @@
         {% set breadcrumbs = {
             'entity':      form.vars.value,
             'indexPath':   path('bug_tracker.issue_index'),
-            'indexLabel': 'ap.bug_tracker.issue_entity.label'|trans,
+            'indexLabel': 'ap.bugtracker.issue.entity_label'|trans,
             'entityTitle': form.vars.value.code
         }%}
         {{ parent() }}
     {% else %}
-        {% set title = 'oro.ui.create_entity'|trans({'%entityName%': 'ap.bug_tracker.issue_entity.label'|trans}) %}
+        {% set title = 'oro.ui.create_entity'|trans({'%entityName%': 'ap.bugtracker.issue.entity_label'|trans}) %}
         {% include 'OroUIBundle::page_title_block.html.twig' with { title: title } %}
     {% endif %}
 {% endblock pageHeader %}

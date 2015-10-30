@@ -38,6 +38,18 @@ services:
     ap.bug_tracker.subtask_add_permission_checker:
         class: %ap.bug_tracker.subtask_add_permission_checker.class%
 
-    ap.bug_tracker.grid.issue_grid_helper:
-        class: AP\Bundle\BugTrackerBundle\Services\Grid\IssueGridHelper
-        arguments: [ @doctrine ]
+    ap.bug_tracker.entity_repository.workflow_step:
+        class: AP\Bundle\BugTrackerBundle\Entity\Repository\WorkflowStepRepository
+        arguments: [ @doctrine.orm.default_entity_manager ]
+
+    ap.bug_tracker.issue_form_data_provider:
+        class: AP\Bundle\BugTrackerBundle\Form\DataProvider\IssueFormDataProvider
+        arguments: [ @ap.bug_tracker.entity_repository.workflow_step ]
+
+    ap.bug_tracker.widget_provider.actions.add_issue:
+        parent: oro_ui.widget_provider.action_button.abstract
+        arguments:
+            - ap_bugtracker_add_issue_button
+            - ap_bugtracker_add_issue_link
+        tags:
+            - { name: oro_ui.view_action_provider, group: activity }

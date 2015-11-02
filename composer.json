@@ -20,7 +20,8 @@
     },
     "require-dev": {
         "sensio/generator-bundle": "2.5.3",
-        "phpunit/phpunit": "4.*"
+        "phpunit/phpunit": "4.*",
+        "fzaninotto/faker": "^1.6@dev"
     },
     "config": {
         "component-dir": "web/bundles/components"

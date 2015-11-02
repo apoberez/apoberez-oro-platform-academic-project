@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "2aef90156025f0eeb14eed755e31bca1",
-    "content-hash": "03652ebaefe647a2c0245b990ddd03c6",
+    "hash": "5a648f83d93525bed0dbaf1209bf5aff",
+    "content-hash": "ea1af26ba10c58d056ee6062b5bbc09a",
     "packages": [
         {
             "name": "a2lix/translation-form-bundle",
@@ -3817,12 +3817,12 @@
             "version": "1.8.2",
             "source": {
                 "type": "git",
-                "url": "https://github.com/orocrm/crm.git",
-                "reference": "0c8d1af8cb98c8871a0f5906b0b981f96af5ab24"
+                "url": "git@github.com:orocrm/crm.git",
+                "reference": "9105033f03ee410333927b66e627fdd21764ff09"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/orocrm/crm/zipball/0c8d1af8cb98c8871a0f5906b0b981f96af5ab24",
+                "url": "https://api.github.com/repos/orocrm/crm/zipball/9105033f03ee410333927b66e627fdd21764ff09",
                 "reference": "9105033f03ee410333927b66e627fdd21764ff09",
                 "shasum": ""
             },
@@ -4016,12 +4016,12 @@
             "version": "1.8.2",
             "source": {
                 "type": "git",
-                "url": "https://github.com/orocrm/platform.git",
-                "reference": "79b91c06bb71a145bf5c0e7c1654a31445424c5d"
+                "url": "git@github.com:orocrm/platform.git",
+                "reference": "30859da1c56695891b36f61a26809eff856b671c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/orocrm/platform/zipball/79b91c06bb71a145bf5c0e7c1654a31445424c5d",
+                "url": "https://api.github.com/repos/orocrm/platform/zipball/30859da1c56695891b36f61a26809eff856b671c",
                 "reference": "30859da1c56695891b36f61a26809eff856b671c",
                 "shasum": ""
             },
@@ -6051,6 +6051,56 @@
     ],
     "packages-dev": [
         {
+            "name": "fzaninotto/faker",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fzaninotto/Faker.git",
+                "reference": "e0d369d63f3e04ac3cc18e8ccebfc92d9f0d8822"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/fzaninotto/Faker/zipball/e0d369d63f3e04ac3cc18e8ccebfc92d9f0d8822",
+                "reference": "e0d369d63f3e04ac3cc18e8ccebfc92d9f0d8822",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "require-dev": {
+                "ext-intl": "*",
+                "phpunit/phpunit": "~4.0",
+                "squizlabs/php_codesniffer": "~1.5"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.6.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Faker\\": "src/Faker/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "François Zaninotto"
+                }
+            ],
+            "description": "Faker is a PHP library that generates fake data for you.",
+            "keywords": [
+                "data",
+                "faker",
+                "fixtures"
+            ],
+            "time": "2015-10-30 22:32:56"
+        },
+        {
             "name": "phpdocumentor/reflection-docblock",
             "version": "2.0.4",
             "source": {
@@ -6949,7 +6999,9 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "fzaninotto/faker": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": [],

@@ -3,6 +3,8 @@
 
 {% if form.vars.value.id %}
     {% set formAction = path('bug_tracker.issue_update', { 'id': form.vars.value.id }) %}
+{% elseif form.vars.value.parentIssue %}
+    {% set formAction = path('bug_tracker.issue_subtask_create', { 'id': form.vars.value.parentIssue.id }) %}
 {% else %}
     {% set formAction = path('bug_tracker.issue_create') %}
 {% endif %}

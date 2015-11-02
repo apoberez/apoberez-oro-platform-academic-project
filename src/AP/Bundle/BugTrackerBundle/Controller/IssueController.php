@@ -61,7 +61,10 @@ class IssueController extends Controller
         }
 
         $result = $this->update($issue);
-        $result['formAction'] = $this->generateUrl('bug_tracker.issue_create');
+
+        if ($request->query->get('_wid')) {
+            $result['formAction'] = $this->generateUrl('bug_tracker.issue_create');
+        }
 
         return $result;
     }
@@ -108,7 +111,7 @@ class IssueController extends Controller
         if ($this->get('ap.bug_tracker.subtask_add_permission_checker')->check($issue)) {
             $subtask = new Issue();
             $subtask
-                ->setAssignee($this->getUser())
+                ->setReporter($this->getUser())
                 ->setParentIssue($issue);
             return $this->update($subtask);
         } else {

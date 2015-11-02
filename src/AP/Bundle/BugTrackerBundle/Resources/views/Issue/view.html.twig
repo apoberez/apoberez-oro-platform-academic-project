@@ -45,40 +45,28 @@
         <div class="widget-content">
             <div class="row-fluid form-horizontal">
                 <div class="responsive-block">
-
-                    {%- set assignee -%}
-                        {%- if entity.assignee -%}
-                            {% if resource_granted('oro_user_user_view') %}
-                                <a href="{{ path('oro_user_view', {'id': entity.assignee.id}) }}">
-                                    {{ entity.assignee|oro_format_name|escape }}
-                                </a>
-                            {% else %}
-                                {{ entity.assignee|oro_format_name|escape }}
-                            {% endif %}
-                        {%- endif -%}
-                    {%- endset -%}
-                    {%- set reporter -%}
-                        {%- if entity.reporter -%}
-                            {% if resource_granted('oro_user_user_view') %}
-                                <a href="{{ path('oro_user_view', {'id': entity.reporter.id}) }}">
-                                    {{ entity.reporter|oro_format_name|escape }}
-                                </a>
-                            {% else %}
-                                {{ entity.reporter|oro_format_name|escape }}
-                            {% endif %}
-                        {%- endif -%}
-                    {%- endset -%}
-
+                    {% macro userLink(user) %}
+                        {% if resource_granted('oro_user_user_view') %}
+                            <a href="{{ path('oro_user_view', {'id': user.id}) }}">
+                                {{ user|oro_format_name|escape }}
+                            </a>
+                        {% else %}
+                            {{ entity.assignee|oro_format_name|escape }}
+                        {% endif %}
+                    {% endmacro %}
                     {% macro linkedIssue(issue) %}
                         <a href="{{ path('bug_tracker.issue_view', {'id': issue.id}) }}">
-                            {{ issue.code }} {{ entity.summary }}
+                            {{ issue.code }}
                         </a>
                     {% endmacro %}
 
                     {{ UI.renderProperty('ap.bugtracker.issue.summary.label'|trans, entity.summary) }}
-                    {{ UI.renderProperty('ap.bugtracker.issue.status.label'|trans, entity.workflowStep.label) }}
-                    {{ UI.renderHtmlProperty('ap.bugtracker.issue.reporter.label'|trans, reporter) }}
-                    {{ UI.renderHtmlProperty('ap.bugtracker.issue.assignee.label'|trans, assignee) }}
+                    {{ UI.renderProperty('ap.bugtracker.issue.status.label'|trans,
+                        entity.workflowStep ? entity.workflowStep.label : 'N/A') }}
+                    {{ UI.renderHtmlProperty('ap.bugtracker.issue.reporter.label'|trans,
+                        entity.reporter ? _self.userLink(entity.reporter) : 'N/A') }}
+                    {{ UI.renderHtmlProperty('ap.bugtracker.issue.assignee.label'|trans,
+                        entity.assignee ? _self.userLink(entity.assignee) : 'N/A') }}
                     {{ UI.renderProperty('ap.bugtracker.issue.description.label'|trans, entity.description) }}
                     {{ UI.renderProperty('ap.bugtracker.issue.priority.label'|trans, entity.priority.label|trans) }}
                     {%- if entity.resolution -%}
@@ -96,6 +84,21 @@
                         {%- endset -%}
                         {{ UI.renderHtmlProperty('ap.bugtracker.issue.parent.label'|trans, parentIssue) }}
                     {%- endif -%}
+                    {%- if entity.subtasks.count > 0 -%}
+                        {%- set subtasks -%}
+                            {% for subtask in entity.subtasks %}
+                                {{ _self.linkedIssue(subtask) }}<br />
+                            {% endfor %}
+                        {%- endset -%}
+                        {{ UI.renderHtmlProperty('ap.bugtracker.issue.subtasks.label'|trans, subtasks) }}
+                    {%- endif -%}
+
+                    {% set collaborators %}
+                        {% for collaborator in entity.collaborators %}
+                            {{ _self.userLink(collaborator) }}<br />
+                        {% endfor %}
+                    {% endset %}
+                    {{ UI.renderHtmlProperty('ap.bugtracker.issue.collaborators.label'|trans, collaborators) }}
 
                 </div>
             </div>

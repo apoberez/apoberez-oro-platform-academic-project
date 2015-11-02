@@ -22,31 +22,19 @@ class IssueControllerTest extends WebTestCase
         $this->loadFixtures(['AP\Bundle\BugTrackerBundle\Tests\Functional\DataFixtures\LoadIssueData']);
     }
 
-    public function testAllTrackerPagesAvailable()
-    {
-        $pages = [
-            '/bug-tracker/issue/',
-            '/bug-tracker/issue/create'
-        ];
-
-        foreach ($pages as $page) {
-            $this->client->request('GET', $page);
-            $this->assertTrue($this->client->getResponse()->isSuccessful());
-        }
-
-    }
-
     public function testCreateIssue()
     {
         $crawler = $this->client->request('GET', '/bug-tracker/issue/create');
-        $doctrine = $this->getContainer()->get('doctrine.orm.entity_manager');
+        $doctrine = $this->getContainer()->get('doctrine.orm.default_entity_manager');
         $priority = $doctrine->getRepository('APBugTrackerBundle:Priority')->findOneBy([]);
+        $assignee = $doctrine->getRepository('OroUserBundle:User')->findOneBy([]);
 
         /** @var Form $form */
         $form = $crawler->selectButton('Save and Close')->form();
 
-        $form['bug_tracker_issue[summary]'] = 'Issue Summary';
+        $form['bug_tracker_issue[summary]'] = 'Test create new issue summary.';
         $form['bug_tracker_issue[description]'] = 'Test create new issue.';
+        $form['bug_tracker_issue[assignee]'] = $assignee->getId();
         $form['bug_tracker_issue[priority]'] = $priority->getId();
         $form['bug_tracker_issue[type]'] = 'story';
         $form['bug_tracker_issue[tags][all]'] =
@@ -54,33 +42,63 @@ class IssueControllerTest extends WebTestCase
         $form['bug_tracker_issue[tags][owner]'] =
             '[{"id":"Test","name":"Test","owner":true,"notSaved":true,"moreOwners":false,"url":""}]';
         $this->client->followRedirects(true);
-        $crawler = $this->client->submit($form);
+        $this->client->submit($form);
 
         $this->assertTrue($this->client->getResponse()->isSuccessful());
-        $this->assertContains('Test create new issue.', $crawler->html());
-
-        $this->assertTrue($this->client->getResponse()->isSuccessful());
-
-        //todo assert entity in db
-        //todo assert tag association
     }
 
     public function testCreateSubtask()
     {
-        $doctrine = $this->getContainer()->get('doctrine.orm.entity_manager');
-        $parent = $doctrine->getRepository('APBugTrackerBundle:Issue')->findOneBy(['type' => Issue::TYPE_STORY]);
+        $manager = $this->getContainer()->get('doctrine.orm.default_entity_manager');
 
-        $crawler = $this->client->request('GET', '/bug-tracker/issue/' . $parent->getId() . '/subtask');
-        $this->assertTrue('');
+        $issue = new Issue();
+        $issue->setType(Issue::TYPE_STORY)
+            ->setCode('STORY-1')
+            ->setPriority($manager->getRepository('APBugTrackerBundle:Priority')->findOneBy([]))
+            ->setDescription('Subtask available issue description')
+            ->setReporter($manager->getRepository('OroUserBundle:User')->find(1))
+            ->setSummary('Subtask available issue')
+        ;
+        $manager->persist($issue);
+        $manager->flush();
+
+        $crawler = $this->client->request('GET', '/bug-tracker/issue/' . $issue->getId() . '/subtask');
+
+
+        $form = $crawler->selectButton('Save and Close')->form();
+
+        $form['bug_tracker_issue[summary]'] = 'Issue Summary';
+        $form['bug_tracker_issue[type]'] = 'subtask';
+        $this->client->followRedirects(true);
+        $this->client->submit($form);
+
+        $this->assertTrue($this->client->getResponse()->isSuccessful());
     }
 
     public function testViewIssue()
     {
+        $doctrine = $this->getContainer()->get('doctrine.orm.default_entity_manager');
+        $issue = $doctrine->getRepository('APBugTrackerBundle:Issue')->findOneBy([]);
 
+        $this->client->request('GET', '/bug-tracker/issue/' . $issue->getId());
+
+        $this->assertTrue($this->client->getResponse()->isSuccessful());
     }
 
     public function testUpdateIssue()
     {
+        $doctrine = $this->getContainer()->get('doctrine.orm.default_entity_manager');
+        $issue = $doctrine->getRepository('APBugTrackerBundle:Issue')->findOneBy([]);
 
+        $crawler = $this->client->request('GET', '/bug-tracker/issue/update/' . $issue->getId());
+        $form = $crawler->selectButton('Save and Close')->form();
+
+        $form['bug_tracker_issue[summary]'] = 'Issue update test Summary';
+
+
+        $this->client->followRedirects(true);
+        $this->client->submit($form);
+
+        $this->assertTrue($this->client->getResponse()->isSuccessful());
     }
 }

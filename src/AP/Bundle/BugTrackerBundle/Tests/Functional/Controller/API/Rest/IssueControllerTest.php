@@ -33,6 +33,7 @@ class IssueControllerTest extends WebTestCase
 
     public function testGetIssueItemAction()
     {
+        /** @var Issue $expectedIssue */
         $expectedIssue = $this->getIssueRepository()->findOneBy([]);
         $url = '/api/rest/latest/bug-tracker/issues/' . $expectedIssue->getId() . '/item';
         $this->client->request('GET', $url);
@@ -43,10 +44,13 @@ class IssueControllerTest extends WebTestCase
 
         $this->assertEquals($expectedIssue->getId(), $responseData->id);
         $this->assertEquals($expectedIssue->getSummary(), $responseData->summary);
+        $this->assertEquals($expectedIssue->getCode(), $responseData->code);
+        $this->assertEquals($expectedIssue->getType(), $responseData->type);
+        $this->assertEquals($expectedIssue->getWorkflowStep()->getLabel(), $responseData->workflowStep);
         $this->assertEquals($expectedIssue->getCreatedAt(), new \DateTime($responseData->createdAt));
         $this->assertEquals($expectedIssue->getUpdatedAt(), new \DateTime($responseData->updatedAt));
-        $this->assertEquals($expectedIssue->getPriority()->getName(), $responseData->priority);
-        $this->assertEquals($expectedIssue->getResolution()->getName(), $responseData->resolution);
+        $this->assertEquals($expectedIssue->getPriority()->getLabel(), $responseData->priority);
+        $this->assertEquals($expectedIssue->getResolution()->getLabel(), $responseData->resolution);
     }
 
     public function testCreateAction()
@@ -101,6 +105,7 @@ class IssueControllerTest extends WebTestCase
         $this->assertEquals($updatedIssue->getSummary(), $requestData['summary']);
         $this->assertEquals($updatedIssue->getDescription(), $requestData['description']);
         $this->assertEquals($updatedIssue->getPriority()->getId(), $requestData['priority']);
+        $this->assertNotNull($updatedIssue->getType());
     }
 
     public function testDeleteIssue()

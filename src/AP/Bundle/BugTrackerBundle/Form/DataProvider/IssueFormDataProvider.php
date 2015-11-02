@@ -63,6 +63,8 @@ class IssueFormDataProvider implements IssueFormDataProviderInterface
      */
     public function getSubtaskTypeChoices()
     {
-        return array_combine(CheckAddSubtask::$allowedTypes, CheckAddSubtask::$allowedTypes);
+        return [
+            Issue::TYPE_SUBTASK => Issue::TYPE_SUBTASK
+        ];
     }
 }

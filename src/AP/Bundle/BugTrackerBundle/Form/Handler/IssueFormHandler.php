@@ -5,7 +5,6 @@ namespace AP\Bundle\BugTrackerBundle\Form\Handler;
 
 use AP\Bundle\BugTrackerBundle\Entity\Issue;
 use AP\Bundle\BugTrackerBundle\Form\Type\IssueType;
-use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Oro\Bundle\FormBundle\Event\FormHandler\AfterFormProcessEvent;
 use Oro\Bundle\FormBundle\Event\FormHandler\Events;
@@ -109,7 +108,7 @@ class IssueFormHandler implements TagHandlerInterface
     protected function submitForm(Request $request)
     {
         $data = $this->request->request->get(IssueType::NAME) ?: $this->request;
-        $this->form->submit($data);
+        $this->form->submit($data, "POST" === $request->getMethod());
     }
 
     /**

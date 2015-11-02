@@ -51,7 +51,7 @@ class IssueFormDataProviderTest extends \PHPUnit_Framework_TestCase
     public function testGetSubtaskTypeChoices()
     {
         $this->assertSame([
-            'story' => 'story',
+            'subtask' => 'subtask',
         ], $this->provider->getSubtaskTypeChoices());
     }
 
